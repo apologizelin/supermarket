@@ -3,7 +3,7 @@ import hashlib
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from users.models import Users
+from users.models import User
 
 
 def index(request):
@@ -21,11 +21,11 @@ def register(request):
         pwd = datas.get("pwd")
         ha = hashlib.md5(pwd.encode("utf-8"))
         pwd = ha.hexdigest()
-        user = Users.objects.filter(username=username)
+        user = User.objects.filter(username=username)
         if user:
             return render(request, "users/reg.html")
         else:
-            Users.objects.create(username=username, pwd=pwd)
+            User.objects.create(username=username, pwd=pwd)
             return redirect("users:登陆")
 
 
@@ -37,11 +37,11 @@ def load(request):
         username = data.get("username")
         pwd = data.get("pwd")
         try:
-            user = Users.objects.get(username=username)
-        except Users.MultipleObjectsReturned:
+            user = User.objects.get(username=username)
+        except User.MultipleObjectsReturned:
             # 获取多个记录
             return redirect("users:登陆")
-        except Users.DoesNotExist:
+        except User.DoesNotExist:
             return redirect("users:登陆")
         ha = hashlib.md5(pwd.encode("utf-8"))
         pwd = ha.hexdigest()

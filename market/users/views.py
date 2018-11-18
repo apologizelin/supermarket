@@ -3,7 +3,8 @@ import hashlib
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from users.models import User
+from users.forms import RegForm, LoadForm
+from users.models import Users
 
 
 def index(request):
@@ -15,18 +16,28 @@ def register(request):
         # 显示注册页面
         return render(request, "users/reg.html")
     else:
-        # 注册并保持到数据库
         datas = request.POST
-        username = datas.get("username")
-        pwd = datas.get("pwd")
-        ha = hashlib.md5(pwd.encode("utf-8"))
-        pwd = ha.hexdigest()
-        user = User.objects.filter(username=username)
-        if user:
-            return render(request, "users/reg.html")
+        form = RegForm(datas)
+        # 表单验证
+        if form.is_valid():
+            datas = form.cleaned_data
+            # 注册并保存到数据库
+            username = datas.get("username")
+            pwd = datas.get("password")
+            ha = hashlib.md5(pwd.encode("utf-8"))
+            pwd = ha.hexdigest()
+            user = Users.objects.filter(username=username)
+            if user:
+                return render(request, "users/reg.html")
+            else:
+                Users.objects.create(username=username, password=pwd)
+                return redirect("users:登陆")
         else:
-            User.objects.create(username=username, pwd=pwd)
-            return redirect("users:登陆")
+            context = {
+                "errors": form.errors,
+                "datas": datas
+            }
+            return render(request, "users/reg.html", context)
 
 
 def load(request):
@@ -34,21 +45,31 @@ def load(request):
         return render(request, "users/login.html")
     else:
         data = request.POST
-        username = data.get("username")
-        pwd = data.get("pwd")
-        try:
-            user = User.objects.get(username=username)
-        except User.MultipleObjectsReturned:
-            # 获取多个记录
-            return redirect("users:登陆")
-        except User.DoesNotExist:
-            return redirect("users:登陆")
-        ha = hashlib.md5(pwd.encode("utf-8"))
-        pwd = ha.hexdigest()
-        # 验证账户
-        if pwd == user.pwd:
-            request.session["ID"] = user.id
-            request.session["username"] = user.username
-            return redirect("users:首页")
+        form = LoadForm(data)
+        # 表单验证
+        if form.is_valid():
+            data = form.cleaned_data
+            username = data.get("username")
+            pwd = data.get("password")
+            try:
+                user = Users.objects.get(username=username)
+            except Users.MultipleObjectsReturned:
+                # 获取多个记录
+                return redirect("users:登陆")
+            except Users.DoesNotExist:
+                return redirect("users:登陆")
+            ha = hashlib.md5(pwd.encode("utf-8"))
+            pwd = ha.hexdigest()
+            # 验证账户
+            if pwd == user.password:
+                request.session["ID"] = user.id
+                request.session["username"] = user.username
+                return redirect("users:首页")
+            else:
+                return redirect("users:登陆")
         else:
-            return redirect("users:登陆")
+            context = {
+                "errors": form.errors,
+                "data": data
+            }
+            return render(request, "users/login.html", context)

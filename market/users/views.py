@@ -7,10 +7,6 @@ from users.forms import RegForm, LoadForm
 from users.models import Users
 
 
-def index(request):
-    return render(request, "users/index.html")
-
-
 def register(request):
     if request.method == "GET":
         # 显示注册页面

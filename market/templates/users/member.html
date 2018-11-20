@@ -24,9 +24,15 @@
 </header>
 <div style="height: 49px;"></div>
 <div class="member">
-    <div class="mem-tit">{{ username }}
-        <a href="../step.html" class="step"><img src="{% static 'images/step.png' %}" width="26"/></a>
-    </div>
+    {% if username %}
+        <div class="mem-tit">{{ username }}
+            <a href="../step.html" class="step"><img src="{% static 'images/step.png' %}" width="26"/></a>
+        </div>
+    {% else %}
+        <div class="mem-tit">现在去<a href="{% url 'users:login' %}">登录</a>/<a href="{% url 'users:register' %}">注册</a>
+            <a href="../step.html" class="step"><img src="{% static 'images/step.png' %}" width="26"/></a>
+        </div>
+    {% endif %}
     <div class="mem-pic">
         <div class="mem-pic-bg" style="background-image: url({% static 'images/memtx.png' %});"></div>
     </div>
@@ -205,7 +211,7 @@
         </li>
 
         <li>
-            <a href="member.html" class="curr">
+            <a href="{% url 'users:member' %}" class="curr">
                 <span class="am-icon-user"></span>
                 <span class="am-navbar-label">我的</span>
             </a>

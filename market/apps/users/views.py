@@ -2,8 +2,8 @@ import hashlib
 from django.shortcuts import render, redirect
 from django.views import View
 
-from apps.helper import verify_login_required
 from apps.users.forms import RegForm, LoadForm
+from apps.users.helper import set_password, login
 from apps.users.models import Users, Infor
 
 
@@ -52,15 +52,11 @@ class RegisterView(View):
             # 注册并保存到数据库
             username = datas.get("username")
             pwd = datas.get("password")
-            ha = hashlib.md5(pwd.encode("utf-8"))
-            pwd = ha.hexdigest()
-            user = Users.objects.filter(username=username)
-            if user:
-                return render(request, "users/reg.html")
-            else:
-                Users.objects.create(username=username, password=pwd)
-                return redirect("users:login")
+            pwd = set_password(pwd)
+            Users.objects.create(username=username, password=pwd)
+            return redirect("users:login")
         else:
+            # 验证失败,返回错误信息
             context = {
                 "errors": form.errors,
                 "datas": datas
@@ -108,38 +104,51 @@ class LoginView(View):
     """登陆"""
 
     def get(self, request):
-        return render(request, "users/login.html")
+        # 创建登陆表单对象
+        login_form = LoadForm()
+        return render(request, "users/login.html", {'form': login_form})
 
     def post(self, request):
         data = request.POST
         form = LoadForm(data)
         # 表单验证
         if form.is_valid():
-            data = form.cleaned_data
-            username = data.get("username")
-            pwd = data.get("password")
-            try:
-                user = Users.objects.get(username=username)
-            except Users.MultipleObjectsReturned:
-                # 获取多个记录
-                return redirect("users:login")
-            except Users.DoesNotExist:
-                return redirect("users:login")
-            ha = hashlib.md5(pwd.encode("utf-8"))
-            pwd = ha.hexdigest()
-            # 验证账户
-            if pwd == user.password:
-                request.session["ID"] = user.id
-                request.session["username"] = user.username
-                return redirect("users:member")
-            else:
-                return redirect("users:login")
+            # 验证成功后将登陆标识放到session中
+            user = form.cleaned_data.get('user')
+            # 调用登陆的方法,放在helper模块中的
+            login(request, user)
+            # 跳转到用户中心页面
+            return redirect('users:member')
         else:
             context = {
-                "errors": form.errors,
-                "data": data
+                "errors": form.errors
             }
             return render(request, "users/login.html", context)
+        # if form.is_valid():
+        #     data = form.cleaned_data
+        #     username = data.get("username")
+        #     pwd = data.get("password")
+        #     try:
+        #         user = Users.objects.get(username=username)
+        #     except Users.MultipleObjectsReturned:
+        #         # 获取多个记录
+        #         return redirect("users:login")
+        #     except Users.DoesNotExist:
+        #         return redirect("users:login")
+        #     pwd = set_password(pwd)
+        #     # 验证账户
+        #     if pwd == user.password:
+        #         request.session["ID"] = user.id
+        #         request.session["username"] = user.username
+        #         return redirect("users:member")
+        #     else:
+        #         return redirect("users:login")
+        # else:
+        #     context = {
+        #         "errors": form.errors,
+        #         "data": data
+        #     }
+        #     return render(request, "users/login.html", context)
 
 
 class ForgetPassView(View):
@@ -164,21 +173,15 @@ class ForgetPassView(View):
 #         return redirect("users:登陆")
 
 
-@verify_login_required
 class MemberView(View):
     """个人中心"""
 
     def get(self, request):
-        # 获取session中的用户名
         username = request.session.get("username")
-        # 判断用户名是否存在,不存在则跳转登陆界面,否则跳转个人中心
-        if username:
-            context = {
-                "username": username
-            }
-            return render(request, "users/member.html", context)
-        else:
-            return redirect("users:login")
+        context = {
+            "username": username
+        }
+        return render(request, "users/member.html", context)
 
 
 # 个人资料
@@ -220,7 +223,6 @@ class MemberView(View):
 #             return render(request, "users/infor.html", context)
 
 
-@verify_login_required
 class InfomationView(View):
     """个人资料"""
 
@@ -248,15 +250,12 @@ class InfomationView(View):
         phone = data.get("phone")
         id = request.session.get("ID")
         info = Infor.objects.filter(num_id=id)
-        context = {
-            "info": data
-        }
         # 判断是否填写过个人资料,填写过再提交便做更新,否则创建
         if info:
             Infor.objects.filter(num_id=id).update(nickname=nickname, sex=sex, birthday=birthday, school=school,
                                                    address=address, hometown=hometown, phone=phone, num_id=id)
-            return render(request, "users/infor.html", context)
+            return redirect("users:member")
         else:
             Infor.objects.create(nickname=nickname, sex=sex, birthday=birthday, school=school, address=address,
                                  hometown=hometown, phone=phone, num_id=id)
-            return render(request, "users/infor.html", context)
+            return redirect("users:member")

@@ -1,6 +1,9 @@
 from django import forms
 from django.core.validators import RegexValidator
 
+from apps.users.helper import set_password
+from apps.users.models import Users
+
 
 class RegForm(forms.Form):
     username = forms.CharField(error_messages={"required": "用户名不能为空"},
@@ -33,6 +36,14 @@ class RegForm(forms.Form):
         # 验证成功 返回所有清洗后的数据
         return datas
 
+    def clean_username(self):
+        # 验证用户名是否唯一
+        username = self.cleaned_data.get('username')
+        rs = Users.objects.filter(username=username).exists()  # 返回bool
+        if rs:
+            raise forms.ValidationError("手机号码已经被注册")
+        return username
+
 
 class LoadForm(forms.Form):
     username = forms.CharField(max_length=11,
@@ -48,3 +59,32 @@ class LoadForm(forms.Form):
                                                "max_length": "格式不正确,请确认密码",
                                                "min_length": "格式不正确,请确认密码"
                                                })
+
+    # widgets = {  # 样式
+    #     'username': forms.TextInput(attrs={"class": "login-name", "placeholder": '请输入手机号'}),
+    #     'password': forms.PasswordInput(attrs={"class": "login-password", "placeholder": '请输入密码'}),
+    # }
+
+    def clean(self):  # 综合校验
+        cleaned_data = self.cleaned_data
+        # 获取用手机和密码
+        username = cleaned_data.get('username')
+        password = cleaned_data.get('password')
+        # 验证手机号码是否存在
+        if all([username, password]):
+            # 获取用户
+            try:
+                user = Users.objects.get(username=username)
+            except Users.DoesNotExist:
+                raise forms.ValidationError({"username": "该用户不存在!"})
+
+            # 判断密码是否正确
+            if user.password != set_password(password):
+                raise forms.ValidationError({"password": "密码填写错误!"})
+
+            # 正确
+            # 将用户信息保存到cleaned_data中
+            cleaned_data['user'] = user
+            return cleaned_data
+        else:
+            return cleaned_data

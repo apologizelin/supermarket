@@ -35,11 +35,11 @@
 <form action="" method="post">
     {% csrf_token %}
     <input type="text" name="username" placeholder="请输入手机号码" class="login-name" value="{{ datas.username }}">
-    <p style="color: red">{{ errors.username.0 }}</p>
+    <p class="am-text-danger">{{ errors.username.0 }}</p>
     <input type="password" name="password" placeholder="请输入密码" class="login-password" value="{{ datas.password }}">
-    <p style="color: red">{{ errors.password.0 }}</p>
+    <p class="am-text-danger">{{ errors.password.0 }}</p>
     <input type="password" name="rpassword" placeholder="确认密码" class="login-name">
-    <p style="color: red">{{ errors.rpassword.0 }}</p>
+    <p class="am-text-danger">{{ errors.rpassword.0 }}</p>
     <div class="yzm" style="margin-top: 1.5rem;">
         <input type="text" class="reg-yzm" placeholder="输入验证码"/>
         <input type="button" class="yzm-hq" value="获取验证码"/>

@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from goods.views import index, detail
+from apps.goods.views import index, detail
 
 urlpatterns = [
     url(r'^$', index, name="首页"),

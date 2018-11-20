@@ -2,10 +2,12 @@ from django.db import models
 
 
 # Create your models here.
-class Goods(models.Model):
+from db.base_model import BaseModel
+
+
+class Goods(BaseModel):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=7, decimal_places=2)
-    time = models.DateField(auto_now=True)
     url = models.CharField(max_length=100, default="")
 
     class Meta:
@@ -15,10 +17,9 @@ class Goods(models.Model):
         return self.name
 
 
-class Comment(models.Model):
+class Comment(BaseModel):
     name = models.CharField(max_length=30, default="")
     content = models.CharField(max_length=200, default="", null=True)
-    time = models.DateField(auto_now_add=True)
     parent = models.ForeignKey(to="Goods")
 
     class Meta:

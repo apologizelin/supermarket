@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # 添加应用
-    'users.apps.UsersConfig',
-    'goods.apps.GoodsConfig',
+    'apps.users.apps.UsersConfig',
+    'apps.goods.apps.GoodsConfig',
 ]
 
 MIDDLEWARE = [

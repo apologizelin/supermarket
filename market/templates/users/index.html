@@ -134,69 +134,6 @@
         </div>
     </li>
     {% endfor %}
-{#    <li>#}
-{#        <div class="am-gallery-item">#}
-{#            <a href="{% url 'goods:商品详情' %}" class="">#}
-{#                <img src="{% static 'images/test1.png' %}"/>#}
-{#                <h3 class="am-gallery-title">冻品批发大江鸡腿 冷鲜鸡腿放心食材1kg 冷冻食材</h3>#}
-{#                <div class="am-gallery-desc">￥39</div>#}
-{#            </a>#}
-{#        </div>#}
-{#    </li>#}
-{#    <li>#}
-{#        <div class="am-gallery-item">#}
-{#            <a href="{% url 'goods:商品详情' %}" class="">#}
-{#                <img src="{% static 'images/test2.png' %}"/>#}
-{#                <h3 class="am-gallery-title">法国加力果12个装 进口新鲜水果 嘎啦苹果 包邮</h3>#}
-{#                <div class="am-gallery-desc">￥45.8</div>#}
-{#            </a>#}
-{#        </div>#}
-{#    </li>#}
-{#    <li>#}
-{#        <div class="am-gallery-item">#}
-{#            <a href="{% url 'goods:商品详情' %}" class="">#}
-{#                <img src=" {% static 'images/test21.png' %}"/>#}
-{#                <h3 class="am-gallery-title">法国加力果12个装 进口新鲜水果 嘎啦苹果 包邮</h3>#}
-{#                <div class="am-gallery-desc">￥45.8</div>#}
-{#            </a>#}
-{#        </div>#}
-{#    </li>#}
-{#    <li>#}
-{#        <div class="am-gallery-item">#}
-{#            <a href="{% url 'goods:商品详情' %}" class="">#}
-{#                <img src=" {% static 'images/test.png' %}"/>#}
-{#                <h3 class="am-gallery-title">猪骨头棒新鲜生鲜肉制品猪大骨头筒骨熬汤佳品500g</h3>#}
-{#                <div class="am-gallery-desc">￥52</div>#}
-{#            </a>#}
-{#        </div>#}
-{#    </li>#}
-{#    <li>#}
-{#        <div class="am-gallery-item">#}
-{#            <a href="{% url 'goods:商品详情' %}" class="">#}
-{#                <img src=" {% static 'images/test1.png' %}"/>#}
-{#                <h3 class="am-gallery-title">冻品批发大江鸡腿 冷鲜鸡腿放心食材1kg 冷冻食材</h3>#}
-{#                <div class="am-gallery-desc">￥39</div>#}
-{#            </a>#}
-{#        </div>#}
-{#    </li>#}
-{#    <li>#}
-{#        <div class="am-gallery-item">#}
-{#            <a href="{% url 'goods:商品详情' %}" class="">#}
-{#                <img src=" {% static 'images/test2.png' %}"/>#}
-{#                <h3 class="am-gallery-title">法国加力果12个装 进口新鲜水果 嘎啦苹果 包邮</h3>#}
-{#                <div class="am-gallery-desc">￥45.8</div>#}
-{#            </a>#}
-{#        </div>#}
-{#    </li>#}
-{#    <li>#}
-{#        <div class="am-gallery-item">#}
-{#            <a href="{% url 'goods:商品详情' %}" class="">#}
-{#                <img src=" {% static 'images/test21.png' %}"/>#}
-{#                <h3 class="am-gallery-title">法国加力果12个装 进口新鲜水果 嘎啦苹果 包邮</h3>#}
-{#                <div class="am-gallery-desc">￥45.8</div>#}
-{#            </a>#}
-{#        </div>#}
-{#    </li>#}
 </ul>
 <!--签到-->
 <div class="qd-box">
@@ -240,7 +177,7 @@
         </li>
 
         <li>
-            <a href="../member.html" class="">
+            <a href="{% url 'users:个人中心' %}" class="">
                 <span class="am-icon-user"></span>
                 <span class="am-navbar-label">我的</span>
             </a>

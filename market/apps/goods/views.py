@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 # Create your views here.
-from goods.models import Goods, Comment
+from apps.goods.models import Goods, Comment
 
 
 def index(request):

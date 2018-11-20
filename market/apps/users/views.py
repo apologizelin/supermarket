@@ -3,8 +3,8 @@ import hashlib
 from django.shortcuts import render, redirect
 
 # Create your views here.
-from users.forms import RegForm, LoadForm
-from users.models import Users
+from apps.users.forms import RegForm, LoadForm
+from apps.users.models import Users, Infor
 
 
 def register(request):
@@ -60,7 +60,7 @@ def load(request):
             if pwd == user.password:
                 request.session["ID"] = user.id
                 request.session["username"] = user.username
-                return redirect("users:首页")
+                return redirect("goods:首页")
             else:
                 return redirect("users:登陆")
         else:
@@ -69,3 +69,39 @@ def load(request):
                 "data": data
             }
             return render(request, "users/login.html", context)
+
+
+def member(requset):
+    username = requset.session.get("username")
+    if username:
+        context = {
+            "username": username
+        }
+        return render(requset, "users/member.html", context)
+    else:
+        return redirect("users:登陆")
+
+
+def infor(request):
+    if request.method == "GET":
+        id = request.session.get("ID")
+        info = Infor.objects.get(num_id=id)
+        context = {
+            "info": info
+        }
+        return render(request, "users/infor.html", context)
+    else:
+        data = request.POST
+        nickname = data.get("nickname")
+        sex = data.get("sex")
+        birthday = data.get("birthday")
+        school = data.get("school")
+        address = data.get("address")
+        hometown = data.get("hometown")
+        phone = data.get("phone")
+        id = request.session.get("ID")
+        Infor.objects.filter(num_id=id).update(nickname=nickname, sex=sex, birthday=birthday, school=school, address=address, hometown=hometown, phone=phone)
+        context = {
+            "info": data
+        }
+        return render(request, "users/infor.html", context)

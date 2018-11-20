@@ -24,7 +24,7 @@
         </a>
     </div>
     <h1 class="am-header-title">
-        <a href="{% url 'users:登陆' %}" class="">登录</a>
+        <a href="{% url 'users:login' %}" class="">登录</a>
     </h1>
 </header>
 <div style="height: 49px;"></div>
@@ -34,15 +34,15 @@
 <div style="height: 3rem;"></div>
 <form action="" method="post">
     {% csrf_token %}
-    <input type="text" name="username" id="mobile" placeholder="请输入用户名" class="login-name" value="{{ data.username }}">
+    <input type="text" name="username" id="mobile" placeholder="请输入手机号码" class="login-name" value="{{ data.username }}">
     <p style="color: red">{{ errors.username.0 }}</p>
     <input type="password" name="password" id="password" placeholder="请输入密码" class="login-password">
     <p style="color: red">{{ errors.password.0 }}</p>
     <input type="submit" class="login-btn" value="我要登录">
 </form>
 <div class="agree">
-    <a href="{% url 'users:注册' %}">免费注册</a>
-    <a href="../forgetpassword.html" class="forget">忘记密码？</a>
+    <a href="{% url 'users:register' %}">免费注册</a>
+    <a href="{% url 'users:forget' %}" class="forget">忘记密码？</a>
 </div>
 <div class="line"></div>
 <div class="line-text">第三方账号登录</div>

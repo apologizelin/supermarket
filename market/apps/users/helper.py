@@ -38,5 +38,8 @@ def set_password(password):
 def login(request, user):
     # 将用户id和手机号码,保存到session中
     request.session['ID'] = user.pk
+    request.session.set_expiry(86400)
     request.session['username'] = user.username
+    request.session.set_expiry(86400)
     # request.session['head'] = user.head
+    # request.session.set_expiry(86400)

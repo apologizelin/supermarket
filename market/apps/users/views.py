@@ -1,11 +1,12 @@
 import hashlib
+
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 
 from apps.users.forms import RegForm, LoadForm
-from apps.users.helper import set_password, login
+from apps.users.helper import set_password, login, verify_login_required
 from apps.users.models import Users, Infor
-
 
 # 注册
 # def register(request):
@@ -35,6 +36,7 @@ from apps.users.models import Users, Infor
 #                 "datas": datas
 #             }
 #             return render(request, "users/reg.html", context)
+from db.base_model import BaseVerifyView
 
 
 class RegisterView(View):
@@ -223,7 +225,7 @@ class MemberView(View):
 #             return render(request, "users/infor.html", context)
 
 
-class InfomationView(View):
+class InfomationView(BaseVerifyView):
     """个人资料"""
 
     def get(self, request):
@@ -259,3 +261,11 @@ class InfomationView(View):
             Infor.objects.create(nickname=nickname, sex=sex, birthday=birthday, school=school, address=address,
                                  hometown=hometown, phone=phone, num_id=id)
             return redirect("users:member")
+
+
+# 上传头像
+def UploadImg(request):
+    user = Users.objects.get(pk=request.session.get("ID"))
+    user.head = request.FILES['file']
+    user.save()
+    return JsonResponse({"status": "ok", "head": str(user.head)})

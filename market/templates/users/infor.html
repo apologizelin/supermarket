@@ -29,62 +29,118 @@
 <div style="height: 49px;"></div>
 <form action="" method="post">
     {% csrf_token %}
-    <ul class="safty1">
-        <li>
-            <i style="margin-top: 25px;">头像</i>
-            <div class="infor-pic">
-                <img src="{% static 'images/infortx.png' %}"/>
-            </div>
-        </li>
-        <li>
-            <i>昵称</i>
-            <input type="text" name="nickname" class="infor-tele" placeholder="{{ info.nickname }}" value="{{ info.nickname }}" />
-        </li>
-        <li>
-            <i>性别</i>
-            <i class="infor-tele">
-                {% if info.sex == 1 %}
+    {% if info %}
+        <ul class="safty1">
+            <li>
+                <i style="margin-top: 25px;">头像</i>
+                <div class="infor-pic">
+                    <img src="{% static 'images/infortx.png' %}"/>
+                </div>
+            </li>
+            <li>
+                <i>昵称</i>
+                <input type="text" name="nickname" class="infor-tele" placeholder="{{ info.nickname }}"
+                       value="{{ info.nickname }}"/>
+            </li>
+            <li>
+                <i>性别</i>
+                <i class="infor-tele">
+                    {% if info.sex == 1 %}
+                        <label class="am-radio-inline">
+                            <input type="radio" name="sex" value="1" checked="checked" data-am-ucheck>男
+                        </label>
+                        <label class="am-radio-inline">
+                            <input type="radio" name="sex" value="2" data-am-ucheck>女
+                        </label>
+                    {% else %}
+                        <label class="am-radio-inline">
+                            <input type="radio" name="sex" value="1" data-am-ucheck>男
+                        </label>
+                        <label class="am-radio-inline">
+                            <input type="radio" name="sex" value="2" checked="checked" data-am-ucheck>女
+                        </label>
+                    {% endif %}
+                </i>
+            </li>
+            <li>
+                <i>生日</i>
+                <input type="text" name="birthday" class="infor-tele" placeholder="{{ info.birthday|date:'Y-m-d' }}"
+                       value="{{ info.birthday|date:'Y-m-d' }}"/>
+            </li>
+        </ul>
+        <div style="height: 10px; background: #efefef;"></div>
+        <ul class="safty1">
+            <li>
+                <i>学校</i>
+                <input type="text" name="school" class="infor-tele" placeholder="{{ info.school }}"
+                       value="{{ info.school }}"/>
+            </li>
+            <li>
+                <i>位置</i>
+                <input type="text" name="address" class="infor-tele" placeholder="{{ info.address }}"
+                       value="{{ info.address }}"/>
+            </li>
+            <li>
+                <i>故乡</i>
+                <input type="text" name="hometown" class="infor-tele" placeholder="{{ info.hometown }}"
+                       value="{{ info.hometown }}"/>
+            </li>
+            <li>
+                <i>手机</i>
+                <input type="text" name="phone" class="infor-tele" placeholder="{{ info.phone }}"
+                       value="{{ info.phone }}"/>
+            </li>
+        </ul>
+        <input type="submit" value="修改信息"/>
+    {% else %}
+        <ul class="safty1">
+            <li>
+                <i style="margin-top: 25px;">头像</i>
+                <div class="infor-pic">
+                    <img src="{% static 'images/infortx.png' %}"/>
+                </div>
+            </li>
+            <li>
+                <i>昵称</i>
+                <input type="text" name="nickname" class="infor-tele" placeholder="请输入昵称"/>
+            </li>
+            <li>
+                <i>性别</i>
+                <i class="infor-tele">
                     <label class="am-radio-inline">
                         <input type="radio" name="sex" value="1" checked="checked" data-am-ucheck>男
                     </label>
                     <label class="am-radio-inline">
                         <input type="radio" name="sex" value="2" data-am-ucheck>女
                     </label>
-                {% else %}
-                    <label class="am-radio-inline">
-                        <input type="radio" name="sex" value="1" data-am-ucheck>男
-                    </label>
-                    <label class="am-radio-inline">
-                        <input type="radio" name="sex" value="2" checked="checked" data-am-ucheck>女
-                    </label>
-                {% endif %}
-            </i>
-        </li>
-        <li>
-            <i>生日</i>
-            <input type="text" name="birthday" class="infor-tele" placeholder="{{ info.birthday|date:'Y-m-d' }}" value="{{ info.birthday|date:'Y-m-d' }}" />
-        </li>
-    </ul>
-    <div style="height: 10px; background: #efefef;"></div>
-    <ul class="safty1">
-        <li>
-            <i>学校</i>
-            <input type="text" name="school" class="infor-tele" placeholder="{{ info.school }}" value="{{ info.school }}" />
-        </li>
-        <li>
-            <i>位置</i>
-            <input type="text" name="address" class="infor-tele" placeholder="{{ info.address }}" value="{{ info.address }}" />
-        </li>
-        <li>
-            <i>故乡</i>
-            <input type="text" name="hometown" class="infor-tele" placeholder="{{ info.hometown }}" value="{{ info.hometown }}" />
-        </li>
-        <li>
-            <i>手机</i>
-            <input type="text" name="phone" class="infor-tele" placeholder="{{ info.phone }}" value="{{ info.phone }}" />
-        </li>
-    </ul>
-    <input type="submit" value="修改信息"/>
+                </i>
+            </li>
+            <li>
+                <i>生日</i>
+                <input type="text" name="birthday" class="infor-tele" placeholder="请填写生日"/>
+            </li>
+        </ul>
+        <div style="height: 10px; background: #efefef;"></div>
+        <ul class="safty1">
+            <li>
+                <i>学校</i>
+                <input type="text" name="school" class="infor-tele" placeholder="请填写学习校"/>
+            </li>
+            <li>
+                <i>位置</i>
+                <input type="text" name="address" class="infor-tele" placeholder="请填写地址"/>
+            </li>
+            <li>
+                <i>故乡</i>
+                <input type="text" name="hometown" class="infor-tele" placeholder="请填写故乡"/>
+            </li>
+            <li>
+                <i>手机</i>
+                <input type="text" name="phone" class="infor-tele" placeholder="请填写手机号码"/>
+            </li>
+        </ul>
+        <input type="submit" value="修改信息"/>
+    {% endif %}
 </form>
 <script src="{% static 'js/jquery.min.js' %}"></script>
 <script src="{% static 'js/amazeui.min.js' %}"></script>

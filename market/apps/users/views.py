@@ -1,8 +1,5 @@
 import hashlib
-
 from django.shortcuts import render, redirect
-
-# Create your views here.
 from apps.users.forms import RegForm, LoadForm
 from apps.users.models import Users, Infor
 
@@ -71,13 +68,13 @@ def load(request):
             return render(request, "users/login.html", context)
 
 
-def member(requset):
-    username = requset.session.get("username")
+def member(request):
+    username = request.session.get("username")
     if username:
         context = {
             "username": username
         }
-        return render(requset, "users/member.html", context)
+        return render(request, "users/member.html", context)
     else:
         return redirect("users:登陆")
 
@@ -85,7 +82,10 @@ def member(requset):
 def infor(request):
     if request.method == "GET":
         id = request.session.get("ID")
-        info = Infor.objects.get(num_id=id)
+        try:
+            info = Infor.objects.get(num_id=id)
+        except:
+            return render(request, "users/infor.html")
         context = {
             "info": info
         }
@@ -100,8 +100,15 @@ def infor(request):
         hometown = data.get("hometown")
         phone = data.get("phone")
         id = request.session.get("ID")
-        Infor.objects.filter(num_id=id).update(nickname=nickname, sex=sex, birthday=birthday, school=school, address=address, hometown=hometown, phone=phone)
+        info = Infor.objects.filter(num_id=id)
         context = {
             "info": data
         }
-        return render(request, "users/infor.html", context)
+        if info:
+            Infor.objects.filter(num_id=id).update(nickname=nickname, sex=sex, birthday=birthday, school=school,
+                                                   address=address, hometown=hometown, phone=phone, num_id=id)
+            return render(request, "users/infor.html", context)
+        else:
+            Infor.objects.create(nickname=nickname, sex=sex, birthday=birthday, school=school, address=address,
+                                 hometown=hometown, phone=phone, num_id=id)
+            return render(request, "users/infor.html", context)

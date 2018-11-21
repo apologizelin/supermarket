@@ -8,7 +8,7 @@ from django.conf.urls import url
 #     url(r'^member/$', member, name="个人中心"),
 #     url(r'^infor/$', infor, name="个人资料"),
 # ]
-from apps.users.views import LoginView, RegisterView, MemberView, InfomationView, ForgetPassView
+from apps.users.views import LoginView, RegisterView, MemberView, InfomationView, ForgetPassView, sendMsg
 
 urlpatterns = [
     url(r'^login/$', LoginView.as_view(), name="login"),  # 登陆
@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^forget/$', ForgetPassView.as_view(), name="forget"),  # 忘记密码
     url(r'^member/$', MemberView.as_view(), name="member"),  # 个人中心
     url(r'^info/$', InfomationView.as_view(), name="info"),  # 个人资料
+    url(r'^send/$', sendMsg, name="sendMsg"),  # 发送短信
 ]

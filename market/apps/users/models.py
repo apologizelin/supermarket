@@ -23,7 +23,7 @@ class Infor(BaseModel):
     head = models.ImageField(upload_to="static/media/", default="images/infortx.png", verbose_name="头像")
     nickname = models.CharField(max_length=20, verbose_name="昵称", null=True, blank=True)
     sex = models.SmallIntegerField(choices=sex_choices, verbose_name="性别", default=1)
-    birthday = models.DateField(auto_now_add=True, verbose_name="生日", null=True, blank=True)
+    birthday = models.DateField(verbose_name="生日", null=True, blank=True)
     school = models.CharField(max_length=100, verbose_name="学校", null=True, blank=True)
     address = models.CharField(max_length=100, verbose_name="地址", null=True, blank=True)
     hometown = models.CharField(max_length=100, verbose_name="故乡", null=True, blank=True)

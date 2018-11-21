@@ -130,6 +130,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
+# 设置redis缓存
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -140,8 +141,14 @@ CACHES = {
     }
 }
 
+# 设置session保存
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
+# 设置上传图片
 MEDIA_URL = "/static/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
+
+# 设置短信验证
+ACCESSKEYID = "LTAI2qSiJdWP87em"
+ACCESSKEYSECRET = "FzORQ587PgGBoOAdmxzCjaxQi8klUi"

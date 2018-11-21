@@ -1,56 +1,74 @@
+{% extends 'public/base.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>超市</title>
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    {#    <link rel="icon" type="image/png" href="/theme/default/images/favicon.png">#}
-    <link href="{% static 'css/amazeui.min.css' %}" rel="stylesheet" type="text/css"/>
-    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css"/>
-    <script src="{% static 'js/jquery-1.10.2.min.js' %}"></script>
-    <script src="{% static 'js/time.js' %}"></script>
-</head>
-<body>
-<header data-am-widget="header" class="am-header am-header-default sq-head ">
-    <div class="am-header-left am-header-nav">
-        <a href="javascript:history.back()" class="">
-            <i class="am-icon-chevron-left"></i>
-        </a>
+{% block main %}
+    <header data-am-widget="header" class="am-header am-header-default sq-head ">
+        <div class="am-header-left am-header-nav">
+            <a href="javascript:history.back()" class="">
+                <i class="am-icon-chevron-left"></i>
+            </a>
+        </div>
+        <h1 class="am-header-title">
+            <a href="{% url 'users:register' %}" class="">注册</a>
+        </h1>
+    </header>
+    <div style="height: 49px;"></div>
+    <!--<div class="login-logo">
+        <img src="images/logo.png" />
+    </div>-->
+    <div style="height: 3rem;"></div>
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="请输入手机号码" class="login-name" value="{{ datas.username }}">
+        <p class="am-text-danger">{{ errors.username.0 }}</p>
+        <input type="password" name="password" placeholder="请输入密码" class="login-password" value="{{ datas.password }}">
+        <p class="am-text-danger">{{ errors.password.0 }}</p>
+        <input type="password" name="rpassword" placeholder="确认密码" class="login-name">
+        <p class="am-text-danger">{{ errors.rpassword.0 }}</p>
+        <div class="yzm" style="margin-top: 1.5rem;">
+            <input type="text" class="reg-yzm" placeholder="输入验证码"/>
+            <input type="button" class="yzm-hq" value="获取验证码"/>
+        </div>
+        <input type="submit" class="login-btn" value="立即注册">
+    </form>
+    <div class="agree">
+        <input type="checkbox" name="checkbox" value="同意" checked="">&nbsp;同意
+        <a href="" class="xy">《用户协议》</a>
+        <div class="r-login">已有账号，请<a href="{% url 'users:login' %}" class="l-login">登录</a></div>
     </div>
-    <h1 class="am-header-title">
-        <a href="{% url 'users:register' %}" class="">注册</a>
-    </h1>
-</header>
-<div style="height: 49px;"></div>
-<!--<div class="login-logo">
-    <img src="images/logo.png" />
-</div>-->
-<div style="height: 3rem;"></div>
-<form action="" method="post">
-    {% csrf_token %}
-    <input type="text" name="username" placeholder="请输入手机号码" class="login-name" value="{{ datas.username }}">
-    <p class="am-text-danger">{{ errors.username.0 }}</p>
-    <input type="password" name="password" placeholder="请输入密码" class="login-password" value="{{ datas.password }}">
-    <p class="am-text-danger">{{ errors.password.0 }}</p>
-    <input type="password" name="rpassword" placeholder="确认密码" class="login-name">
-    <p class="am-text-danger">{{ errors.rpassword.0 }}</p>
-    <div class="yzm" style="margin-top: 1.5rem;">
-        <input type="text" class="reg-yzm" placeholder="输入验证码"/>
-        <input type="button" class="yzm-hq" value="获取验证码"/>
-    </div>
-    <input type="submit" class="login-btn" value="立即注册">
-</form>
-<div class="agree">
-    <input type="checkbox" name="checkbox" value="同意" checked="">&nbsp;同意
-    <a href="" class="xy">《用户协议》</a>
-    <div class="r-login">已有账号，请<a href="{% url 'users:login' %}" class="l-login">登录</a></div>
-</div>
-
-</body>
+{% endblock %}
+{% block foot_js %}
+    <script>
+        $(function () {
+            // 绑定获取验证码点击事件
+            $(".yzm-hq").on("click", function () {
+                var that = this;
+                //console.debug(111);
+                var phone = $("input[name='username']").val();
+                $.get('{% url "users:sendMsg" %}', {'phone': phone}, function (data) {
+                    if (data.ok == 1) {
+                        //console.debug(1111)
+                        var time = 60;
+                        $(that).css("background-color", "gray");
+                        $(that).attr("disabled", "disabled");
+                        var timer = window.setInterval(function () {
+                            --time;
+                            $(that).val(time + "后重新获取");
+                            if (time == 0) {
+                                window.clearInterval(timer);
+                                $(that).css("background", "#76bb2a");
+                                $(that).removeAttr("disabled");
+                                $(that).val("获取验证码");
+                            }
+                        }, 1000)
+                    }
+                    else {
+                        alert(data.msg)
+                    }
+                })
+            })
+        })
+    </script>
+{% endblock %}
 </html>

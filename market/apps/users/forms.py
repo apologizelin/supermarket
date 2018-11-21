@@ -1,5 +1,6 @@
 from django import forms
 from django.core.validators import RegexValidator
+from django_redis import get_redis_connection
 
 from apps.users.helper import set_password
 from apps.users.models import Users
@@ -43,6 +44,27 @@ class RegForm(forms.Form):
         if rs:
             raise forms.ValidationError("手机号码已经被注册")
         return username
+
+
+# 短信验证
+verify_code = forms.CharField(error_messages={"required": "请填写验证"})
+
+
+# 单独使用一个方法校验 验证码
+def clean_verify_code(self):
+    # 验证验证码是否填写正确
+    # 获取redis中的验证码
+    r = get_redis_connection()
+    tel = self.cleaned_data.get('phone')
+    s_code = r.get(tel)
+    if not s_code:
+        raise forms.ValidationError("验证码已经过期")
+    # 表单传入的验证码
+    verify_code = self.cleaned_data.get('verify_code')
+    # sid_verify_code = self.data.get('sid_verify_code')
+    if str(verify_code) != str(s_code):
+        raise forms.ValidationError("验证码输入有误")
+    return verify_code
 
 
 class LoadForm(forms.Form):

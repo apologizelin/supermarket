@@ -31,10 +31,11 @@
     {% csrf_token %}
     {% if info %}
         <ul class="safty1">
-            <li>
+            <li style="height: 120px">
                 <i style="margin-top: 25px;">头像</i>
                 <div class="infor-pic">
                     <img src="{% static 'images/infortx.png' %}"/>
+                    <input type="file" name="head" />
                 </div>
             </li>
             <li>

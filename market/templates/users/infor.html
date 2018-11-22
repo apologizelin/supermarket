@@ -27,14 +27,14 @@
     </h1>
 </header>
 <div style="height: 49px;"></div>
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {% if info %}
         <ul class="safty1">
             <li style="height: 120px">
                 <i style="margin-top: 25px;">头像</i>
                 <div class="infor-pic">
-                    <img src="{% static 'images/infortx.png' %}"/>
+                    <img src="{{ MEDIA_URL }}{{ info.head }}" />
                     <input type="file" name="head" />
                 </div>
             </li>
@@ -92,7 +92,7 @@
                        value="{{ info.phone }}"/>
             </li>
         </ul>
-        <input type="submit" value="修改信息"/>
+        <input type="submit" class="login-btn" value="修改信息"/>
     {% else %}
         <ul class="safty1">
             <li>
@@ -140,7 +140,7 @@
                 <input type="text" name="phone" class="infor-tele" placeholder="请填写手机号码"/>
             </li>
         </ul>
-        <input type="submit" value="修改信息"/>
+        <input type="submit" class="login-btn" value="保存信息"/>
     {% endif %}
 </form>
 <script src="{% static 'js/jquery.min.js' %}"></script>

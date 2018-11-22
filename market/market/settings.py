@@ -68,7 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.media',
+                'django.template.context_processors.media',  # 设置上传文件
             ],
         },
     },
@@ -147,7 +147,7 @@ SESSION_CACHE_ALIAS = "default"
 
 # 设置上传图片
 MEDIA_URL = "/static/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media/')
 
 # 设置短信验证
 ACCESSKEYID = "LTAI2qSiJdWP87em"

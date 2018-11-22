@@ -20,7 +20,7 @@ class Infor(BaseModel):
         (1, "男"),
         (2, "女"),
     )
-    head = models.ImageField(upload_to="static/media/", default="images/infortx.png", verbose_name="头像")
+    head = models.ImageField(upload_to="", default="images/infortx.png", verbose_name="头像")
     nickname = models.CharField(max_length=20, verbose_name="昵称", null=True, blank=True)
     sex = models.SmallIntegerField(choices=sex_choices, verbose_name="性别", default=1)
     birthday = models.DateField(verbose_name="生日", null=True, blank=True)

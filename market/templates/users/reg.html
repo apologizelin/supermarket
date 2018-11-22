@@ -46,12 +46,20 @@
                 var that = this;
                 //console.debug(111);
                 var phone = $("input[name='username']").val();
-                $.get('{% url "users:sendMsg" %}', {'phone': phone}, function (data) {
+                $.get('{% url "users:sendMsg" %}', {
+                    'phone': phone,
+                    "csrfmiddlewaretoken": "{{ csrf_token }}",
+                }, function (data) {
                     if (data.ok == 1) {
+                        //console.debug(data.ok);
                         //console.debug(1111)
+                        //设置再次发送验证码时间
                         var time = 60;
+                        //改变按钮样式
                         $(that).css("background-color", "gray");
+                        //按钮设置为无法再点击
                         $(that).attr("disabled", "disabled");
+                        //设置周期性函数,周期为1000毫秒
                         var timer = window.setInterval(function () {
                             --time;
                             $(that).val(time + "后重新获取");

@@ -86,13 +86,13 @@ def send_phone_code(request):
             r.set(phone, code)
             r.expire(phone, 120)
 
-            # 发送短信验证
+            # 发送短信验证(注释后以便测试)
             print(code)
-            __business_id = uuid.uuid1()
-            # print(__business_id)
-            params = "{\"code\":\"%s\",\"product\":\"校园超市\"}" % code
-            # params = u'{"name":"wqb","code":"12345678","address":"bz","phone":"13000000000"}'
-            print(send_sms(__business_id, phone, "注册验证", "SMS_2245271", params))
+            # __business_id = uuid.uuid1()
+            # # print(__business_id)
+            # params = "{\"code\":\"%s\",\"product\":\"校园超市\"}" % code
+            # # params = u'{"name":"wqb","code":"12345678","address":"bz","phone":"13000000000"}'
+            # print(send_sms(__business_id, phone, "注册验证", "SMS_2245271", params))
 
             # 验证成功
             return {'ok': 1, 'code': 200}
@@ -218,13 +218,17 @@ class ForgetPassView(View):
 #         return redirect("users:登陆")
 
 
-class MemberView(View):
+class MemberView(BaseVerifyView):
     """个人中心"""
 
     def get(self, request):
         username = request.session.get("username")
+        id = request.session.get("ID")
+        data = Infor.objects.filter(num_id=id).first()
+        print(data)
         context = {
-            "username": username
+            "username": username,
+            "data": data
         }
         return render(request, "users/member.html", context)
 
@@ -294,18 +298,28 @@ class InfomationView(BaseVerifyView):
         hometown = data.get("hometown")
         phone = data.get("phone")
         id = request.session.get("ID")
-        # user = Users.objects.get(id)
-        # user.head = request.FILES['file']
-        # head = str(user.head)
-        info = Infor.objects.filter(num_id=id)
+        # 获取头像地址
+        head = request.FILES.get("head")
+        # head = str(he)
+        print(head)
+        info = Infor.objects.filter(num_id=id).first()
         # 判断是否填写过个人资料,填写过再提交便做更新,否则创建
         if info:
-            Infor.objects.filter(num_id=id).update(nickname=nickname, sex=sex, birthday=birthday,
-                                                   school=school,
-                                                   address=address, hometown=hometown, phone=phone, num_id=id)
+            # Infor.objects.filter(num_id=id).update(head=head, nickname=nickname, sex=sex, birthday=birthday,
+            #                                        school=school,
+            #                                        address=address, hometown=hometown, phone=phone, num_id=id)
+            info.head = head
+            info.nickname = nickname
+            info.sex = sex
+            info.birthday = birthday
+            info.school = school
+            info.address = address
+            info.hometown = hometown
+            info.phone = phone
+            info.save()
             return redirect("users:member")
         else:
-            Infor.objects.create(nickname=nickname, sex=sex, birthday=birthday, school=school,
+            Infor.objects.create(head=head, nickname=nickname, sex=sex, birthday=birthday, school=school,
                                  address=address,
                                  hometown=hometown, phone=phone, num_id=id)
             return redirect("users:member")
@@ -313,6 +327,6 @@ class InfomationView(BaseVerifyView):
 # 上传头像
 # def UploadImg(request):
 #     user = Users.objects.get(pk=request.session.get("ID"))
-#     user.head = request.FILES['file']
+#     user.head = request.FILES['head']
 #     user.save()
 #     return JsonResponse({"status": "ok", "head": str(user.head)})

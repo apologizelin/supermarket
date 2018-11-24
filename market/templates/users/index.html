@@ -42,7 +42,7 @@
 <div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0">
     <ul class="am-slides">
         {% for lun in lunbo %}
-            <li><img src="{{ MEDIA_URL }}{{ lun.pic_url }}"/></li>
+            <li><a href="{% url 'goods:商品详情' lun.goods_sku.pk %}"><img src="{{ MEDIA_URL }}{{ lun.pic_url }}"/></a></li>
         {% endfor %}
     </ul>
 </div>
@@ -92,7 +92,7 @@
     </li>
     <li>
         <div class="am-gallery-item">
-            <a href="{% url 'goods:超市' %}" class="">
+            <a href="{% url 'goods:超市' 1 0 %}" class="">
                 <img src="{% static 'images/icon5.png' %}"/>
                 <p>超市</p>
             </a>
@@ -102,39 +102,41 @@
 <div class="h-line"></div>
 <!--不规则展示-->
 <div class="index-product">
-    <div class="index-pro-lf"><a href="#"><img src="{{ MEDIA_URL }}{{ active.0.pic }}"/></a></div>
-    <div class="index-pro-lr"><a href="#"><img src="{{ MEDIA_URL }}{{ active.1.pic }}"/></a></div>
+    <div class="index-pro-lf"><a href="https://www.jd.com"><img src="{{ MEDIA_URL }}{{ active.0.pic }}"/></a></div>
+    <div class="index-pro-lr"><a href="https://www.jd.com"><img src="{{ MEDIA_URL }}{{ active.1.pic }}"/></a></div>
 </div>
 <div class="product-bot">
-    <div class="product-bot-lf"><a href="#"><img src="{{ MEDIA_URL }}{{ active.2.pic }}"/></a></div>
+    <div class="product-bot-lf"><a href="https://www.jd.com"><img src="{{ MEDIA_URL }}{{ active.2.pic }}"/></a></div>
     <div class="product-bot-lr">
-        <div class="top"><a href=""><img src="{{ MEDIA_URL }}{{ active.3.pic }}"/></a></div>
+        <div class="top"><a href="https://www.jd.com"><img src="{{ MEDIA_URL }}{{ active.3.pic }}"/></a></div>
         <div class="bot">
-            <div class="bot-lf"><a href="#"><img src="{{ MEDIA_URL }}{{ active.4.pic }}"/></a></div>
-            <div class="bot-lr"><a href="#"><img src="{{ MEDIA_URL }}{{ active.5.pic }}"/></a></div>
+            <div class="bot-lf"><a href="https://www.jd.com"><img src="{{ MEDIA_URL }}{{ active.4.pic }}"/></a></div>
+            <div class="bot-lr"><a href="https://www.jd.com"><img src="{{ MEDIA_URL }}{{ active.5.pic }}"/></a></div>
         </div>
     </div>
 </div>
 <!--不规则展示-->
 <div class="h-line"></div>
 <!-- 特色专区-->
-<div class="sq-title">
-    <img src="{% static 'images/ts.png' %}" width="26"/>
-    特色专区
-</div>
-<ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-2 am-avg-md-2 am-avg-lg-4 am-gallery-default">
-    {% for good in goods %}
-        <li>
-        <div class="am-gallery-item">
-            <a href="{% url 'goods:商品详情' %}?id={{ good.pk }}" class="">
-                <img src="{{ MEDIA_URL }}{{ good.logo_url }}" style="height: 194px"/>
-                <h3 class="am-gallery-title">{{ good.introduce }}</h3>
-                <div class="am-gallery-desc">￥{{ good.price }}</div>
-            </a>
-        </div>
-    </li>
-    {% endfor %}
-</ul>
+{% for area in areas %}
+    <div class="sq-title">
+        <img src="{% static 'images/ts.png' %}" width="26"/>
+        {{ area.name }}
+    </div>
+    <ul data-am-widget="gallery" class="am-gallery pro-list am-avg-sm-2 am-avg-md-2 am-avg-lg-4 am-gallery-default">
+        {% for g in area.produce_set.all %}
+            <li>
+                <div class="am-gallery-item">
+                    <a href="{% url 'goods:商品详情' g.goods_id.pk %}" class="">
+                        <img src="{{ MEDIA_URL }}{{ g.goods_id.logo_url }}" style="height: 194px"/>
+                        <h3 class="am-gallery-title">{{ g.goods_id.good_id.name }}&emsp;{{ g.goods_id.name }}</h3>
+                        <div class="am-gallery-desc">￥{{ g.goods_id.price }}</div>
+                    </a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endfor %}
 <!--签到-->
 <div class="qd-box">
     <div class="popup-title">

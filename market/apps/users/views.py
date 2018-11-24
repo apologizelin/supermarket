@@ -7,7 +7,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 
-from apps.users.forms import RegForm, LoadForm
+from apps.users.forms import RegForm, LoadForm, RorgetForm
 from apps.users.helper import set_password, login, verify_login_required, send_sms
 from apps.users.models import Users, Infor
 from django_redis import get_redis_connection
@@ -201,7 +201,24 @@ class ForgetPassView(View):
         return render(request, "users/forgetpassword.html")
 
     def post(self, request):
-        return render(request, "users/forgetpassword.html")
+        datas = request.POST
+        form = RorgetForm(datas)
+        # 表单验证
+        if form.is_valid():
+            datas = form.cleaned_data
+            # 修改并保存到数据库
+            username = datas.get("username")
+            pwd = datas.get("password")
+            pwd = set_password(pwd)
+            Users.objects.filter(username=username).update(password=pwd)
+            return redirect("users:login")
+        else:
+            # 验证失败,返回错误信息
+            context = {
+                "errors": form.errors,
+                "datas": datas
+            }
+            return render(request, "users/forgetpassword.html", context)
 
 
 # 个人中心

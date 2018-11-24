@@ -22,8 +22,8 @@ class ActiveAdmin(admin.ModelAdmin):
 
 @admin.register(AreaGoods)
 class AreaGoodsAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "script", "order"]
-    list_display_links = ["id", "name", "script", "order"]
+    list_display = ["id", "name", "script", "order", "is_sale"]
+    list_display_links = ["id", "name", "script", "order", "is_sale"]
 
 
 @admin.register(Produce)
@@ -46,9 +46,9 @@ class GoodAdmin(admin.ModelAdmin):
 
 @admin.register(Goodsku)
 class GoodskuAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "introduce", "unit", "price", "stock", "sale_num", "logo_url", "isGround",
+    list_display = ["id", "name", "introduce", "unit", "price", "stock", "sale_num", "show_logo", "isGround",
                     "assortment_id", "good_id"]
-    list_display_links = ["id", "name", "introduce", "unit", "price", "stock", "sale_num", "logo_url",
+    list_display_links = ["id", "name", "introduce", "unit", "price", "stock", "sale_num", "show_logo",
                           "isGround", "assortment_id", "good_id"]
     inlines = [GoodskuInline]
 

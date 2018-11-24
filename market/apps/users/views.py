@@ -308,15 +308,25 @@ class InfomationView(BaseVerifyView):
             # Infor.objects.filter(num_id=id).update(head=head, nickname=nickname, sex=sex, birthday=birthday,
             #                                        school=school,
             #                                        address=address, hometown=hometown, phone=phone, num_id=id)
-            info.head = head
-            info.nickname = nickname
-            info.sex = sex
-            info.birthday = birthday
-            info.school = school
-            info.address = address
-            info.hometown = hometown
-            info.phone = phone
-            info.save()
+            if head:
+                info.head = head
+                info.nickname = nickname
+                info.sex = sex
+                info.birthday = birthday
+                info.school = school
+                info.address = address
+                info.hometown = hometown
+                info.phone = phone
+                info.save()
+            else:
+                info.nickname = nickname
+                info.sex = sex
+                info.birthday = birthday
+                info.school = school
+                info.address = address
+                info.hometown = hometown
+                info.phone = phone
+                info.save()
             return redirect("users:member")
         else:
             Infor.objects.create(head=head, nickname=nickname, sex=sex, birthday=birthday, school=school,

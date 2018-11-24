@@ -41,8 +41,9 @@
 <!--图片轮换-->
 <div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0">
     <ul class="am-slides">
-        <li><img src="{% static 'images/banner.png' %}"/></li>
-        <li><img src="{% static 'images/banner.png' %}"/></li>
+        {% for lun in lunbo %}
+            <li><img src="{{ MEDIA_URL }}{{ lun.pic_url }}"/></li>
+        {% endfor %}
     </ul>
 </div>
 <!--导航-->
@@ -91,27 +92,26 @@
     </li>
     <li>
         <div class="am-gallery-item">
-            <a href="../category.html" class="">
+            <a href="{% url 'goods:超市' %}" class="">
                 <img src="{% static 'images/icon5.png' %}"/>
                 <p>超市</p>
             </a>
         </div>
     </li>
-
 </ul>
 <div class="h-line"></div>
 <!--不规则展示-->
 <div class="index-product">
-    <div class="index-pro-lf"><a href=""><img src="{% static 'images/s1.png' %}"/></a></div>
-    <div class="index-pro-lr"><a href=""><img src="{% static 'images/s2.png' %}"/></a></div>
+    <div class="index-pro-lf"><a href="#"><img src="{{ MEDIA_URL }}{{ active.0.pic }}"/></a></div>
+    <div class="index-pro-lr"><a href="#"><img src="{{ MEDIA_URL }}{{ active.1.pic }}"/></a></div>
 </div>
 <div class="product-bot">
-    <div class="product-bot-lf"><a href=""><img src="{% static 'images/s3.png' %}"/></a></div>
+    <div class="product-bot-lf"><a href="#"><img src="{{ MEDIA_URL }}{{ active.2.pic }}"/></a></div>
     <div class="product-bot-lr">
-        <div class="top"><a href=""><img src="{% static 'images/s4.png' %}"/></a></div>
+        <div class="top"><a href=""><img src="{{ MEDIA_URL }}{{ active.3.pic }}"/></a></div>
         <div class="bot">
-            <div class="bot-lf"><a href=""><img src="{% static 'images/s5.png' %}"/></a></div>
-            <div class="bot-lr"><a href=""><img src="{% static 'images/s6.png' %}"/></a></div>
+            <div class="bot-lf"><a href="#"><img src="{{ MEDIA_URL }}{{ active.4.pic }}"/></a></div>
+            <div class="bot-lr"><a href="#"><img src="{{ MEDIA_URL }}{{ active.5.pic }}"/></a></div>
         </div>
     </div>
 </div>
@@ -127,8 +127,8 @@
         <li>
         <div class="am-gallery-item">
             <a href="{% url 'goods:商品详情' %}?id={{ good.pk }}" class="">
-                <img src="{% static good.url %}" style="height: 194px"/>
-                <h3 class="am-gallery-title">{{ good.name }}</h3>
+                <img src="{{ MEDIA_URL }}{{ good.logo_url }}" style="height: 194px"/>
+                <h3 class="am-gallery-title">{{ good.introduce }}</h3>
                 <div class="am-gallery-desc">￥{{ good.price }}</div>
             </a>
         </div>

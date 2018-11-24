@@ -34,8 +34,8 @@
             <li style="height: 120px">
                 <i style="margin-top: 25px;">头像</i>
                 <div class="infor-pic">
-                    <img src="{{ MEDIA_URL }}{{ info.head }}" />
-                    <input type="file" name="head" />
+                    <img src="{{ MEDIA_URL }}{{ info.head }}"/>
+                    <input type="file" name="head"/>
                 </div>
             </li>
             <li>
@@ -46,26 +46,19 @@
             <li>
                 <i>性别</i>
                 <i class="infor-tele">
-                    {% if info.sex == 1 %}
-                        <label class="am-radio-inline">
-                            <input type="radio" name="sex" value="1" checked="checked" data-am-ucheck>男
-                        </label>
-                        <label class="am-radio-inline">
-                            <input type="radio" name="sex" value="2" data-am-ucheck>女
-                        </label>
-                    {% else %}
-                        <label class="am-radio-inline">
-                            <input type="radio" name="sex" value="1" data-am-ucheck>男
-                        </label>
-                        <label class="am-radio-inline">
-                            <input type="radio" name="sex" value="2" checked="checked" data-am-ucheck>女
-                        </label>
-                    {% endif %}
+                    <label class="am-radio-inline">
+                        <input type="radio" name="sex" value="1" {% if info.sex == 1 %}checked="checked"{% endif %}
+                               data-am-ucheck>男
+                    </label>
+                    <label class="am-radio-inline">
+                        <input type="radio" name="sex" value="2" {% if info.sex == 2 %}checked="checked"{% endif %}
+                               data-am-ucheck>女
+                    </label>
                 </i>
             </li>
             <li>
                 <i>生日</i>
-                <input type="text" name="birthday" class="infor-tele" placeholder="{{ info.birthday|date:'Y-m-d' }}"
+                <input type="date" name="birthday" class="infor-tele" placeholder="{{ info.birthday|date:'Y-m-d' }}"
                        value="{{ info.birthday|date:'Y-m-d' }}"/>
             </li>
         </ul>
@@ -118,7 +111,7 @@
             </li>
             <li>
                 <i>生日</i>
-                <input type="text" name="birthday" class="infor-tele" placeholder="请填写生日"/>
+                <input type="date" name="birthday" class="infor-tele" placeholder="请填写生日"/>
             </li>
         </ul>
         <div style="height: 10px; background: #efefef;"></div>

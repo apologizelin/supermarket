@@ -51,8 +51,9 @@
 <!--图片轮换-->
 <div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0">
     <ul class="am-slides">
-        <li><img src="{% static goods.url %}" style="height: 334px" draggable="false"/></li>
-        <li><img src="{% static goods.url %}" style="height: 334px" draggable="false"/></li>
+        {% for g in goods.goodpic_set.all %}
+            <li><img src="{{ MEDIA_URL }}{{ g.pic_url }}" style="height: 334px" draggable="false"/></li>
+        {% endfor %}
     </ul>
 </div>
 <div class="detal-info" style="position: relative; width: 100%;">
@@ -82,10 +83,7 @@
 
     <div class="am-tabs-bd">
         <div class="am-tab-panel am-fade am-in am-active detail " id="tab1">
-            <p>产地: 中国大陆</p>
-            <p>功效: 瘦身,美容,提神,抗氧化,保健,降三高</p>
-            <p>保质期: >2年</p>
-            <img src="{% static 'images/test11.png' %}"/>
+            {{ goods.good_id.detail|safe }}
         </div>
         <div class="am-tab-panel am-fade detail " id="tab2">
             <!--<div class="comment">

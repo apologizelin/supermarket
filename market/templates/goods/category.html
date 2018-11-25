@@ -12,63 +12,48 @@
             white-space: normal;
             text-overflow: ellipsis;
         }
-
-        .list-price {
-            background: url({% if order == 2 %}{% static 'images/order-bot.png' %}{% elif order == 3 %}{% static 'images/order-top.png' %}{% else %}{% static 'images/order.png' %}{% endif %}) no-repeat right center;
-            padding-right: 20px;
-            font-style: normal;
-        }
     </style>
 {% endblock %}
 
 {% block main %}
     <header data-am-widget="header" class="am-header am-header-default sq-head ">
         <div class="am-header-left am-header-nav">
-            <a href="{% url 'goods:首页' %}" class="">
+            <a href="javascript:history.back()" class="">
                 <i class="am-icon-chevron-left"></i>
             </a>
         </div>
         <div class="cate-search">
-            <form action="/search/" method="get">
-                <input type="text" class="cate-input" name="q" value="" placeholder="请输入您要的搜索的产品关键词"/>
-                <input type="submit" class="cate-btn" value=""/>
-            </form>
+            <input type="text" class="cate-input" placeholder="请输入您要的搜索的产品关键词"/>
+            <input type="button" class="cate-btn"/>
         </div>
     </header>
     <div style="height: 49px;"></div>
     <ul class="list-nav">
-        <li {% if order == 0 %}class="current"{% endif %}><a href="{% url 'goods:超市' c_id 0 %}">综合</a></li>
-        <li {% if order == 1 %}class="current"{% endif %}><a href="{% url 'goods:超市' c_id 1 %}">销量</a></li>
-        <li {% if order == 3 %}class="current"{% endif %}><a href="{% url 'goods:超市' c_id 3 %}"><i
-                class="list-price">价格</i></a></li>
-        <li {% if order == 4 %}class="current"{% endif %}><a href="{% url 'goods:超市' c_id 4 %}">新品</a></li>
+        <li class="current"><a href="#">综合</a></li>
+        <li><a href="#">销量</a></li>
+        <li><a href="#"><i class="list-price">价格</i></a></li>
+        <li><a href="#">新品</a></li>
     </ul>
     <div class="content-list">
         <div class="list-left">
             {% for ass in assort %}
-                <li {% if c_id == ass.pk %}class="current"{% endif %}>
-                    <a href="{% url 'goods:超市' ass.pk order %}">{{ ass.name }}</a>
-                </li>
+                {% if ass.pk == 1 %}
+                    <li class="current" c_id="{{ ass.pk }}">{{ ass.name }}</li>
+                {% else %}
+                    <li c_id="{{ ass.pk }}">{{ ass.name }}</li>
+                {% endif %}
             {% endfor %}
         </div>
         <div class="list-right">
             <ul class="list-pro">
                 {% for good in goods %}
                     <li>
-                        <a href="{% url 'goods:商品详情' good.pk %}">
-                            <img src="{{ MEDIA_URL }}{{ good.logo_url }}" class="list-pic"/>
-                        </a>
+                        <a href="detail.html"><img src="{{ MEDIA_URL }}{{ good.logo_url }}" class="list-pic"/></a>
                         <div class="shop-list-mid" style="width: 65%;">
-                            <div class="tit">
-                                <a href="{% url 'goods:商品详情' good.pk %}">
-                                    {{ good.good_id.name }}&emsp;{{ good.name }}
-                                </a>
+                            <div class="tit"><a href="{% url 'goods:商品详情' %}?id={{ good.pk }}">{{ good.introduce }}</a>
                             </div>
                             <div class="am-gallery-desc">￥{{ good.price }}</div>
-                            <p>
-                                销量：{{ good.sale_num }}{% if good.unit == 1 %}件{% elif good.unit == 2 %}
-                                斤{% elif good.unit == 3 %}箱{% endif %}
-                            </p>
+                            <p>销量：{{ good.sale_num }}件</p>
                         </div>
                         <div class="list-cart">
                             <div class="d-stock ">
@@ -79,25 +64,15 @@
                         </div>
                         <!--<a href="" class="list-cart"><img src="images/cart.png" width="30"/></a>-->
                     </li>
-                {% empty %}
-                    <p class="am-btn">此分类下还没有商品哦!~~</p>
                 {% endfor %}
             </ul>
-            {% if goods.has_previous %}
-                <a href="?p={{ goods.previous_page_number }}">上一页</a>
-            {% endif %}
-            {% if goods.has_next %}
-                <a href="?p={{ goods.next_page_number }}">下一页</a>
-            {% endif %}
         </div>
     </div>
 
     <!--底部-->
     <div style="height: 55px;"></div>
     <div class="fix-bot">
-        <a href="{% url 'cart:购物车' %}">
-            <div class="fix-bot-cart"><i id="cart_num">0</i></div>
-        </a>
+        <div class="fix-bot-cart"><i>8</i></div>
         <a href="../tureorder.html" class="list-js">去结算</a>
         <a href="../tureorder.html" class="list-jsk">一键快购</a>
         <!--<div class="js-text">
@@ -121,10 +96,7 @@
                     self.siblings(".text_box").fadeIn();
                 }
                 self.siblings('input').val(current_num);
-                {#update_item(self.siblings('input').data('item-id'));#}
-                var cart_num = self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text();
-                cart_num = parseInt(cart_num) + 1;
-                self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text(cart_num);
+                update_item(self.siblings('input').data('item-id'));
             });
             $('.decrease').click(function () {
                 var self = $(this);
@@ -136,18 +108,28 @@
                         self.siblings(".text_box").fadeOut();
                     }
                     self.siblings('input').val(current_num);
-                    {#update_item(self.siblings('input').data('item-id'));#}
-                    var cart_num = self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text();
-                    cart_num = parseInt(cart_num) - 1;
-                    self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text(cart_num);
+                    update_item(self.siblings('input').data('item-id'));
                 }
             });
-            //改变价格上的url地址
-            if ("{{ order }}" == 2) {
-                $(".list-price").parent("a").attr('href', "{% url 'goods:超市' c_id 3 %}")
-            } else if ("{{ order }}" == 3) {
-                $(".list-price").parent("a").attr('href', "{% url 'goods:超市' c_id 2 %}")
-            }
+            $(".list-left li").on("click", function () {
+                $(".list-left li").removeClass("current");
+                $(this).addClass("current");
+                var c_id = $(this).attr("c_id");
+                //console.debug(c_id);
+                $.ajax({
+                    type: "GET",
+                    url: "",
+                    data: {"c_id": c_id},
+                    dataType: "json",
+                    success: function (data) {
+                        console.debug(data)
+                    }
+                })
+            });
+            $(".list-nav li").on("click", function () {
+                $(".list-nav li").removeClass("current");
+                $(this).addClass("current");
+            })
         })
     </script>
 {% endblock %}

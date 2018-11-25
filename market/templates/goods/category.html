@@ -29,8 +29,10 @@
             </a>
         </div>
         <div class="cate-search">
-            <input type="text" class="cate-input" placeholder="请输入您要的搜索的产品关键词"/>
-            <input type="button" class="cate-btn"/>
+            <form action="/search/" method="get">
+                <input type="text" class="cate-input" name="q" value="" placeholder="请输入您要的搜索的产品关键词"/>
+                <input type="submit" class="cate-btn" value=""/>
+            </form>
         </div>
     </header>
     <div style="height: 49px;"></div>
@@ -63,7 +65,10 @@
                                 </a>
                             </div>
                             <div class="am-gallery-desc">￥{{ good.price }}</div>
-                            <p>销量：{{ good.sale_num }}{{ good.unit.1 }}</p>
+                            <p>
+                                销量：{{ good.sale_num }}{% if good.unit == 1 %}件{% elif good.unit == 2 %}
+                                斤{% elif good.unit == 3 %}箱{% endif %}
+                            </p>
                         </div>
                         <div class="list-cart">
                             <div class="d-stock ">
@@ -90,7 +95,9 @@
     <!--底部-->
     <div style="height: 55px;"></div>
     <div class="fix-bot">
-        <div class="fix-bot-cart"><i>8</i></div>
+        <a href="{% url 'cart:购物车' %}">
+            <div class="fix-bot-cart"><i id="cart_num">0</i></div>
+        </a>
         <a href="../tureorder.html" class="list-js">去结算</a>
         <a href="../tureorder.html" class="list-jsk">一键快购</a>
         <!--<div class="js-text">
@@ -114,7 +121,10 @@
                     self.siblings(".text_box").fadeIn();
                 }
                 self.siblings('input').val(current_num);
-                update_item(self.siblings('input').data('item-id'));
+                {#update_item(self.siblings('input').data('item-id'));#}
+                var cart_num = self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text();
+                cart_num = parseInt(cart_num) + 1;
+                self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text(cart_num);
             });
             $('.decrease').click(function () {
                 var self = $(this);
@@ -126,7 +136,10 @@
                         self.siblings(".text_box").fadeOut();
                     }
                     self.siblings('input').val(current_num);
-                    update_item(self.siblings('input').data('item-id'));
+                    {#update_item(self.siblings('input').data('item-id'));#}
+                    var cart_num = self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text();
+                    cart_num = parseInt(cart_num) - 1;
+                    self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text(cart_num);
                 }
             });
             //改变价格上的url地址

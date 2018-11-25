@@ -16,7 +16,11 @@
     <script src="{% static 'js/jquery-1.10.2.min.js' %}"></script>
     <script>
         function changeImage() {
-            document.getElementById("imgflag").src = "images/redherat.png";
+            if ($("#imgflag").attr("src") == '{% static 'images/herat.png' %}') {
+                document.getElementById("imgflag").src = "{% static 'images/redherat.png' %}";
+            } else {
+                document.getElementById("imgflag").src = "{% static 'images/herat.png' %}";
+            }
         }
     </script>
 
@@ -58,7 +62,7 @@
 </div>
 <div class="detal-info" style="position: relative; width: 100%;">
     <p>{{ goods.name }}</p>
-    <h2>商城价：<span>￥{{ goods.price }}</span></h2>
+    <h2>商城价：<span id="price">￥{{ goods.price }}</span></h2>
     <div class="heart">
         <img src="{% static 'images/herat.png' %}" width="25" id="imgflag" onclick="changeImage()"/>
         <p>收藏</p>
@@ -143,7 +147,7 @@
 <!--底部-->
 <div style=" height: 55px;"></div>
 <ul class="fix-shopping">
-    <li><a href="../shopcart.html" class="join">加入购物车</a></li>
+    <li><a href="{% url 'cart:购物车' %}" class="join">加入购物车</a></li>
     <li><a href="../tureorder.html" class="imm-buy">立即购买</a></li>
 </ul>
 
@@ -155,7 +159,9 @@
             var current_num = parseInt(self.siblings('input').val());
             current_num += 1;
             self.siblings('input').val(current_num);
-            update_item(self.siblings('input').data('item-id'));
+            {#update_item(self.siblings('input').data('item-id'));#}
+            var price = parseFloat({{ goods.price }});
+            self.parents(".d-amount").prev().find("#price").text("￥" + price * current_num);
         });
         $('.decrease').click(function () {
             var self = $(this);
@@ -163,9 +169,11 @@
             if (current_num > 1) {
                 current_num -= 1;
                 self.siblings('input').val(current_num);
-                update_item(self.siblings('input').data('item-id'));
+                {#update_item(self.siblings('input').data('item-id'));#}
+                var price = parseFloat({{ goods.price }});
+                self.parents(".d-amount").prev().find("#price").text("￥" + price * current_num);
             }
-        })
+        });
     })
 </script>
 

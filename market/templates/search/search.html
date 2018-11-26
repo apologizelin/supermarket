@@ -1,4 +1,12 @@
 {% extends 'public/base.html' %}
+{% load highlight %}
+{% block css %}
+    <style>
+        .class_name {
+            color: red;
+        }
+    </style>
+{% endblock %}
 {% block main %}
     <header data-am-widget="header" class="am-header am-header-default sq-head ">
         <div class="am-header-left am-header-nav">
@@ -8,7 +16,7 @@
         </div>
         <div class="cate-search">
             <form action="/search/" method="get">
-                <input type="text" class="cate-input" name="q" value="" placeholder="请输入您要的搜索的产品关键词"/>
+                <input type="text" class="cate-input" name="q" value="{{ query }}" placeholder="请输入您要的搜索的产品关键词"/>
                 <input type="submit" class="cate-btn" value=""/>
             </form>
         </div>
@@ -23,7 +31,9 @@
                         <div class="shop-list-mid" style="width: 65%;">
                             <div class="tit">
                                 <a href="{% url 'goods:商品详情' result.object.pk %}">
-                                    {{ result.object.good_id.name }}{{ result.object.name }}
+                                    {% highlight result.object.good_id.name with query css_class "class_name" html_tag "span" %}&emsp;
+                                    {% highlight result.object.name with query css_class "class_name" html_tag "span" %}
+                                    {#                                    {{ result.object.good_id.name }}&emsp;{{ result.object.name }}#}
                                 </a>
                             </div>
                             <div class="am-gallery-desc">￥{{ result.object.price }}</div>
@@ -34,6 +44,12 @@
                     <li>没有找到您搜索的产品！</li>
                 {% endfor %}
             </ul>
+            {% if page.has_previous %}
+                <a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">上一页</a>
+            {% endif %}
+            {% if page.has_next %}
+                <a href="?q={{ query }}&amp;page={{ page.next_page_number }}">下一页</a>
+            {% endif %}
             </div>
         {% endif %}
 {% endblock %}

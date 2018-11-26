@@ -1,4 +1,3 @@
-import hashlib
 import random
 import re
 import uuid
@@ -11,6 +10,8 @@ from apps.users.forms import RegForm, LoadForm, RorgetForm
 from apps.users.helper import set_password, login, verify_login_required, send_sms
 from apps.users.models import Users, Infor
 from django_redis import get_redis_connection
+from db.base_model import BaseVerifyView
+
 
 # 注册
 # def register(request):
@@ -40,7 +41,6 @@ from django_redis import get_redis_connection
 #                 "datas": datas
 #             }
 #             return render(request, "users/reg.html", context)
-from db.base_model import BaseVerifyView
 
 
 class RegisterView(View):

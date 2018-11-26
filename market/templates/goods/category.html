@@ -53,7 +53,7 @@
                             <div class="tit"><a href="{% url 'goods:商品详情' %}?id={{ good.pk }}">{{ good.introduce }}</a>
                             </div>
                             <div class="am-gallery-desc">￥{{ good.price }}</div>
-                            <p>销量：{{ good.sale_num }}件</p>
+                            <p>销量：{{ good.sale_num }}{{ good.unit.1 }}</p>
                         </div>
                         <div class="list-cart">
                             <div class="d-stock ">

@@ -1,4 +1,0 @@
-# 指定搜索的字段
-{{object.name}}
-{{object.introduce}}
-{{object.good_id.detail}}

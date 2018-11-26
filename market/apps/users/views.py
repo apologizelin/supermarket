@@ -162,6 +162,12 @@ class LoginView(View):
             user = form.cleaned_data.get('user')
             # 调用登陆的方法,放在helper模块中的
             login(request, user)
+
+            # 登陆成功返回之前页面
+            next = request.GET.get("next")
+            if next:
+                return redirect(next)
+
             # 跳转到用户中心页面
             return redirect('users:member')
         else:

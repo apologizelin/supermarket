@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, redirect
 from apps.goods.models import Goodsku, Comment, Active, Assortment, LunBo, AreaGoods
+from django_redis import get_redis_connection
 
 
 def index(request):
@@ -37,6 +38,7 @@ def category(request, c_id, order):
     """
     c_id = int(c_id)
     order = int(order)
+    user_id = request.session.get("ID")
     # 获取分类
     assort = Assortment.objects.filter(isDelete=False).order_by("-order")
     # 查询分类下的商品 默认查询第一个分类

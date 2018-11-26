@@ -72,9 +72,10 @@
                         </div>
                         <div class="list-cart">
                             <div class="d-stock ">
-                                <a class="decrease">-</a>
-                                <input id="num" readonly="" class="text_box" name="" type="text" value="0">
-                                <a class="increase">+</a>
+                                <a href="javascript:;" class="decrease">-</a>
+                                <input id="num" readonly="" sku_id="{{ good.pk }}" class="text_box" name="" type="text"
+                                       value="0">
+                                <a href="javascript:;" class="increase">+</a>
                             </div>
                         </div>
                         <!--<a href="" class="list-cart"><img src="images/cart.png" width="30"/></a>-->
@@ -95,7 +96,7 @@
     <!--底部-->
     <div style="height: 55px;"></div>
     <div class="fix-bot">
-        <a href="{% url 'cart:购物车' %}">
+        <a href="{% url 'cart:cart' %}">
             <div class="fix-bot-cart"><i id="cart_num">0</i></div>
         </a>
         <a href="../tureorder.html" class="list-js">去结算</a>
@@ -121,11 +122,37 @@
                     self.siblings(".text_box").fadeIn();
                 }
                 self.siblings('input').val(current_num);
-                {#update_item(self.siblings('input').data('item-id'));#}
+                // 发送ajax请求,保存商品到redis中
+                var num = self.prev().val();
+                var sku_id = self.prev().attr("sku_id");
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'cart:CartAdd' %}",
+                    data: {
+                        "num": num,
+                        "sku_id": sku_id,
+                        "csrfmiddlewaretoken": "{{ csrf_token }}"
+                    },
+                    success: function (data) {
+                        //console.debug(data)
+                        if (data.code == 0) {
+                            console.debug(data)
+                        } else if (data.code == 1) {
+                            // 没有登录,询问是否跳转到登陆界面
+                            var flag = confirm("您还没有登陆,是否跳转到登陆界面");
+                            //console.debug(flag); true
+                            if (flag == true) {
+                                location.href = "{% url 'users:login' %}?next={% url 'goods:超市' 1 0 %}"
+                            }
+                        }
+                    }
+                });
+
                 var cart_num = self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text();
                 cart_num = parseInt(cart_num) + 1;
                 self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text(cart_num);
             });
+
             $('.decrease').click(function () {
                 var self = $(this);
                 var current_num = parseInt(self.siblings('input').val());
@@ -136,7 +163,32 @@
                         self.siblings(".text_box").fadeOut();
                     }
                     self.siblings('input').val(current_num);
-                    {#update_item(self.siblings('input').data('item-id'));#}
+                    // 发送ajax请求,保存商品到redis中
+                    var num = self.next().val();
+                    var sku_id = self.next().attr("sku_id");
+                    $.ajax({
+                        type: "POST",
+                        url: "{% url 'cart:CartReduce' %}",
+                        data: {
+                            "num": num,
+                            "sku_id": sku_id,
+                            "csrfmiddlewaretoken": "{{ csrf_token }}"
+                        },
+                        success: function (data) {
+                            //console.debug(data)
+                            if (data.code == 0) {
+                                console.debug(data)
+                            } else if (data.code == 1) {
+                                // 没有登录,询问是否跳转到登陆界面
+                                var flag = confirm("您还没有登陆,是否跳转到登陆界面");
+                                //console.debug(flag); true
+                                if (flag == true) {
+                                    location.href = "{% url 'users:login' %}?next={% url 'goods:超市' 1 0 %}"
+                                }
+                            }
+                        }
+                    });
+
                     var cart_num = self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text();
                     cart_num = parseInt(cart_num) - 1;
                     self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text(cart_num);

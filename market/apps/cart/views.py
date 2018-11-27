@@ -74,7 +74,7 @@ class CartAdd(View):
         # 保存数据到redis中
         r = get_redis_connection('default')
         cart_key = "cart_key_{}".format(user_id)
-        r.hset(cart_key, sku_id, num)
+        r.hincrby(cart_key, sku_id, num)
         return JsonResponse({"code": 0, "msg": "成功"})
 
 
@@ -94,6 +94,13 @@ class CartReduce(View):
         num = request.POST.get("num")
         sku_id = request.POST.get("sku_id")
         cart_key = "cart_key_{}".format(user_id)
+
+        # 判断是否是分类页商品减少
+        if num == "-1":
+            int(num)
+            r.hincrby(cart_key, sku_id, num)
+            return JsonResponse({"code": 6, "msg": "成功"})
+
         # 判断参数是否正确
         try:
             num = int(num)
@@ -112,7 +119,8 @@ class CartReduce(View):
         if num > goods.stock:
             return JsonResponse({"code": 5, "errmsg": "库存不足"})
         # 保存数据到redis中
-        r.hset(cart_key, sku_id, num)
+        # r.hset(cart_key, sku_id, num)
+        r.hincrby(cart_key, sku_id, num)
         return JsonResponse({"code": 0, "msg": "成功"})
 
 
@@ -129,6 +137,7 @@ def cart(request):
         good = Goodsku.objects.get(pk=sku_id)
         good.num = num
         datas.append(good)
+
     context = {
         "data": datas,
     }

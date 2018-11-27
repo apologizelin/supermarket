@@ -71,16 +71,16 @@
     <div class="u-list-main">
         <img src="{% static 'images/order-pic.png' %}" width="27"/>
         <span>我的购物订单</span>
-        <a href="../allorder.html">查看全部订单></a>
+        <a href="../allorder/allorder.html">查看全部订单></a>
     </div>
     <ul class="user-nav">
-        <li><a href="../allorder.html"> <img src="{% static 'images/1-icon.png' %}">
+        <li><a href="../allorder/allorder.html"> <img src="{% static 'images/1-icon.png' %}">
             <p>待付款</p></a></li>
-        <li><a href="../allorder.html"> <img src="{% static 'images/1-icon1.png' %}">
+        <li><a href="../allorder/allorder.html"> <img src="{% static 'images/1-icon1.png' %}">
             <p>待收货</p></a></li>
-        <li><a href="../allorder.html"> <img src="{% static 'images/1-icon2.png' %}">
+        <li><a href="../allorder/allorder.html"> <img src="{% static 'images/1-icon2.png' %}">
             <p>待评价</p></a></li>
-        <li><a href="../allorder.html"> <img src="{% static 'images/1-icon3.png' %}">
+        <li><a href="../allorder/allorder.html"> <img src="{% static 'images/1-icon3.png' %}">
             <p>退换货</p></a></li>
     </ul>
     <div class="u-list-main">
@@ -202,13 +202,13 @@
             </a>
         </li>
         <li>
-            <a href="../cart/shopcart.html" class="">
+            <a href="{% url 'cart:cart' %}" class="">
                 <span class="am-icon-shopping-cart"></span>
                 <span class="am-navbar-label">购物车</span>
             </a>
         </li>
         <li>
-            <a href="../allorder.html" class="">
+            <a href="{% url 'allorder:订单' %}" class="">
                 <span class="am-icon-file-text"></span>
                 <span class="am-navbar-label">订单</span>
             </a>

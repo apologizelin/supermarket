@@ -149,13 +149,13 @@
     <div data-am-widget="navbar" class="am-navbar am-cf am-navbar-default sq-foot am-no-layout" id="">
         <ul class="am-navbar-nav am-cf am-avg-sm-5">
             <li>
-                <a href="index.html" class="curr">
+                <a href="" class="curr">
                     <span class="am-icon-home"></span>
                     <span class="am-navbar-label">首页</span>
                 </a>
             </li>
             <li>
-                <a href="../message.html" class="">
+                <a href="" class="">
                     <span class="am-icon-comments"></span>
                     <span class="am-navbar-label">动态</span>
                 </a>
@@ -167,7 +167,7 @@
                 </a>
             </li>
             <li>
-                <a href="../allorder.html" class="">
+                <a href="{% url 'allorder:订单' %}" class="">
                     <span class="am-icon-file-text"></span>
                     <span class="am-navbar-label">订单</span>
                 </a>
@@ -202,7 +202,7 @@
                     if (result && result.city && result.bounds) {
                         var cityinfo = result.city;
                         var citybounds = result.bounds;
-                        document.getElementById('info').innerHTML =cityinfo;
+                        document.getElementById('info').innerHTML = cityinfo;
                         //地图显示当前城市
                         {#map.setBounds(citybounds);#}
                     }

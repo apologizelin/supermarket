@@ -41,9 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # 添加应用
     'haystack',  # 全文检索框架,需在自己添加的应用的前面
-    'apps.users.apps.UsersConfig',
-    'apps.goods.apps.GoodsConfig',
-    'apps.cart.apps.CartConfig',
+    'apps.users.apps.UsersConfig',  # 用户模块
+    'apps.goods.apps.GoodsConfig',  # 商品模块
+    'apps.cart.apps.CartConfig',  # 购物车模块
+    'apps.allorder.apps.AllorderConfig',  # 订单模块
     'ckeditor',  # 添加ckeditor富文本编辑器
     'ckeditor_uploader',  # 添加ckeditor富文本编辑器文件上传部件
 ]

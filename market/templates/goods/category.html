@@ -97,7 +97,7 @@
     <div style="height: 55px;"></div>
     <div class="fix-bot">
         <a href="{% url 'cart:cart' %}">
-            <div class="fix-bot-cart"><i id="cart_num">0</i></div>
+            <div class="fix-bot-cart"><i class="cart_num">{{ num }}</i></div>
         </a>
         <a href="../tureorder.html" class="list-js">去结算</a>
         <a href="../tureorder.html" class="list-jsk">一键快购</a>
@@ -113,8 +113,12 @@
     <script>
         //购物数量加减
         $(function () {
-            $('.increase').click(function () {
+            $('.increase').on("click", function () {
                 var self = $(this);
+                // 改变购物车上的数量显示
+                var n = self.parents(".content-list").next().next(".fix-bot").find(".cart_num").text();
+                n = parseInt(n) + 1;
+                self.parents(".content-list").next().next(".fix-bot").find(".cart_num").text(n);
                 var current_num = parseInt(self.siblings('input').val());
                 current_num += 1;
                 if (current_num > 0) {
@@ -123,7 +127,7 @@
                 }
                 self.siblings('input').val(current_num);
                 // 发送ajax请求,保存商品到redis中
-                var num = self.prev().val();
+                var num = 1;
                 var sku_id = self.prev().attr("sku_id");
                 $.ajax({
                     type: "POST",
@@ -147,14 +151,14 @@
                         }
                     }
                 });
-
-                var cart_num = self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text();
-                cart_num = parseInt(cart_num) + 1;
-                self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text(cart_num);
             });
 
-            $('.decrease').click(function () {
+            $('.decrease').on("click", function () {
                 var self = $(this);
+                // 改变购物车上的数量显示
+                var n = self.parents(".content-list").next().next(".fix-bot").find(".cart_num").text();
+                n = parseInt(n) - 1;
+                self.parents(".content-list").next().next(".fix-bot").find(".cart_num").text(n);
                 var current_num = parseInt(self.siblings('input').val());
                 if (current_num > 0) {
                     current_num -= 1;
@@ -164,7 +168,7 @@
                     }
                     self.siblings('input').val(current_num);
                     // 发送ajax请求,保存商品到redis中
-                    var num = self.next().val();
+                    var num = -1;
                     var sku_id = self.next().attr("sku_id");
                     $.ajax({
                         type: "POST",
@@ -185,15 +189,14 @@
                                 if (flag == true) {
                                     location.href = "{% url 'users:login' %}?next={% url 'goods:超市' 1 0 %}"
                                 }
+                            }else if(data.code == 6){
+                                console.debug(data)
                             }
                         }
                     });
-
-                    var cart_num = self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text();
-                    cart_num = parseInt(cart_num) - 1;
-                    self.parents(".content-list").next().next(".fix-bot").find("#cart_num").text(cart_num);
                 }
             });
+
             //改变价格上的url地址
             if ("{{ order }}" == 2) {
                 $(".list-price").parent("a").attr('href', "{% url 'goods:超市' c_id 3 %}")

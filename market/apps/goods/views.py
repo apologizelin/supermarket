@@ -66,11 +66,21 @@ def category(request, c_id, order):
     except PageNotAnInteger:
         page = paginator.page(1)
 
+    # 连接redis查询商品总数量
+    r = get_redis_connection("default")
+    cart_key = "cart_key_{}".format(user_id)
+    data = r.hgetall(cart_key)
+    count = 0
+    for sku_id, num in data.items():
+        sku_id = int(sku_id)
+        num = int(num)
+        count += num
     # 渲染页面
     context = {
         "assort": assort,
         "goods": page,
         "c_id": c_id,
         "order": order,
+        "num": count
     }
     return render(request, "goods/category.html", context)

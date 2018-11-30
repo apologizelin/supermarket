@@ -17,5 +17,5 @@ class InforAdmin(admin.ModelAdmin):
 
 @admin.register(UserAddress)
 class UserAddressAdmin(admin.ModelAdmin):
-    list_display = ["id", "user", "username", "phone", "proper", "city", "area", "brief", "isDefault"]
-    list_display_links = ["id", "user", "username", "phone", "proper", "city", "area", "brief", "isDefault"]
+    list_display = ["id", "user", "username", "phone", "hcity", "hproper", "harea", "brief", "isDefault"]
+    list_display_links = ["id", "user", "username", "phone", "hcity", "hproper", "harea", "brief", "isDefault"]

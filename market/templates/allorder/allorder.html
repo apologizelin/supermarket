@@ -21,7 +21,6 @@
         <li><a href="allorder.html">退发货</a></li>
         <li><a href="allorder.html">待收货</a></li>
         <li><a href="allorder.html">待评价</a></li>
-
     </ul>
     <!--代付款-->
     <div class="c-comment">
@@ -38,7 +37,7 @@
         </a>
     </div>
     <div class="c-com-btn">
-        <a href="../tureorder.html" class="oncepay">立即支付</a>
+        <a href="tureorder.html" class="oncepay">立即支付</a>
         <a href="" class="canelpay">取消订单</a>
     </div>
     <div class="clear"></div>
@@ -142,7 +141,7 @@
                 </a>
             </li>
             <li>
-                <a href="" class="curr">
+                <a href="{% url 'allorder:订单' %}" class="curr">
                     <span class="am-icon-file-text"></span>
                     <span class="am-navbar-label">订单</span>
                 </a>

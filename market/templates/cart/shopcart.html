@@ -20,37 +20,40 @@
             <a href="{% url 'goods:超市' 1 0 %}" class="goshopping">前去逛逛</a>
         </div>
     {% else %}
-        <ul class="shopcart-list">
-            {% for g in data %}
-                <li>
-                    <label class="am-checkbox am-warning">
-                        <input type="checkbox" checked="checked" value="" data-am-ucheck checked>
-                    </label>
-                    <a href="{% url 'goods:商品详情' g.pk %}"><img src="{{ MEDIA_URL }}{{ g.logo_url }}" class="shop-pic"/></a>
-                    <div class="shop-list-mid">
-                        <div class="tit"><a
-                                href="{% url 'goods:商品详情' g.pk %}">{{ g.good_id.name }}&emsp;{{ g.name }}</a>
+        <form id="cart" action="{% url 'allorder:tureorder' %}" method="get">
+            <ul class="shopcart-list">
+                {% for g in data %}
+                    <li>
+                        <label class="am-checkbox am-warning">
+                            <input type="checkbox" checked="checked" name="sku_id" value="{{ g.pk }}" data-am-ucheck>
+                        </label>
+                        <a href="{% url 'goods:商品详情' g.pk %}"><img src="{{ MEDIA_URL }}{{ g.logo_url }}"
+                                                                   class="shop-pic"/></a>
+                        <div class="shop-list-mid">
+                            <div class="tit"><a
+                                    href="{% url 'goods:商品详情' g.pk %}">{{ g.good_id.name }}&emsp;{{ g.name }}</a>
+                            </div>
+                            <b class="shop-list-price">￥<span class="price">{{ g.price }}</span></b>
                         </div>
-                        <b class="shop-list-price">￥<span class="price">{{ g.price }}</span></b>
-                    </div>
-                    <div class="list-cart1">
-                        <div class="d-stock">
-                            <a href="javascript:;" class="decrease">-</a>
-                            <input id="" readonly="" sku_id="{{ g.pk }}" class="text_box num" name="" type="text"
-                                   value="{{ g.num }}">
-                            <a href="javascript:;" class="increase">+</a>
+                        <div class="list-cart1">
+                            <div class="d-stock">
+                                <a href="javascript:;" class="decrease">-</a>
+                                <input id="" readonly="" sku_id="{{ g.pk }}" class="text_box num" name="" type="text"
+                                       value="{{ g.num }}">
+                                <a href="javascript:;" class="increase">+</a>
+                            </div>
                         </div>
-                    </div>
-                </li>
-            {% endfor %}
-            <div style="height: 10px; background: #eee;"></div>
-        </ul>
+                    </li>
+                {% endfor %}
+                <div style="height: 10px; background: #eee;"></div>
+            </ul>
+        </form>
         <div class="shop-fix">
             <label class="am-checkbox am-warning">
-                <input id="check_all" type="checkbox" checked="checked" value="" data-am-ucheck checked>
+                <input id="check_all" type="checkbox" checked="checked" value="" data-am-ucheck>
             </label>
             <a class="del">全选</a>
-            <a href="../tureorder.html" class="js-btn">去结算</a>
+            <a href="javascript:;" class="js-btn">去结算</a>
             <div class="js-text">
                 <P>合计：￥<b id="count_price">00.00</b></P>
                 <p class="js-car">免费配送</p>
@@ -81,12 +84,11 @@
                 </a>
             </li>
             <li>
-                <a href="../allorder/allorder.html" class="">
+                <a href="{% url 'allorder:订单' %}" class="">
                     <span class="am-icon-file-text"></span>
                     <span class="am-navbar-label">订单</span>
                 </a>
             </li>
-
             <li>
                 <a href="{% url 'users:member' %}">
                     <span class="am-icon-user"></span>
@@ -189,6 +191,16 @@
 
             // 调用函数
             totalPrice();
+
+            // 绑定结算
+            $(".js-btn").on("click", function () {
+                if ($(".shopcart-list").find(":checked").length > 0) {
+                    $("#cart").submit();
+                } else {
+                    alert("请选择商品")
+                }
+
+            })
         });
     </script>
     <script src="{% static 'js/jquery.min.js' %}"></script>

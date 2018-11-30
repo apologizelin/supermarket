@@ -1,0 +1,102 @@
+{% extends "public/base.html" %}
+{% load static %}
+{% block main %}
+    <header data-am-widget="header" class="am-header am-header-default sq-head ">
+        <div class="am-header-left am-header-nav">
+            <a href="{% url 'users:member' %}" class="">
+                <i class="am-icon-chevron-left"></i>
+            </a>
+        </div>
+        <h1 class="am-header-title">
+            <a href="" class="">管理收货地址</a>
+        </h1>
+        <div class="am-header-right am-header-nav">
+            <a href="{% url 'allorder:address' %}" class="">
+                <i class="am-icon-plus"></i>
+            </a>
+        </div>
+    </header>
+    <div style="height: 49px;"></div>
+    <ul class="address-list">
+        {% for d in data %}
+            <li data_id="{{ d.pk }}" {% if d.isDefault %}class="curr"{% endif %}>
+                <p>收货人：{{ d.username }}&nbsp;&nbsp;{{ d.phone }}</p>
+                <p class="order-add1">收货地址：{{ d.hcity }} {{ d.hproper }} {{ d.harea }} {{ d.brief }}</p>
+                <hr/>
+                <div class="address-cz">
+                    <label class="am-radio am-warning">
+                        <input class="defa" type="radio" name="radio3" {% if d.isDefault %}checked{% endif %}
+                               data-am-ucheck> 设为默认
+                    </label>
+                    <a href="{% url 'allorder:editAddress' d.pk %}">
+                        <img src="{% static 'images/bj.png' %}" width="18"/>&nbsp;编辑
+                    </a>
+                    <a href="javascript:;" class="del">删除</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+{% block foot_js %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/amazeui.min.js' %}"></script>
+    <script>
+        $(function () {
+            // 点击删除,删除此收货地址
+            $(".del").on("click", function () {
+                //console.debug(11);
+                var li = $(this).parents("li");
+                var id = li.attr("data_id");
+                var flag = confirm("是否删除此收货地址?");
+                if (flag == true) {
+                    li.remove();
+                    $.ajax({
+                        type: "post",
+                        url: "{% url 'allorder:delAddress' %}",
+                        data: {
+                            "id": id,
+                            "csrfmiddlewaretoken": "{{ csrf_token }}",
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.code == 0) {
+                                console.debug(data);
+                            } else {
+                                console.debug(data)
+                            }
+                        }
+                    });
+                }
+            });
+
+            // 点击设为默认,设置为默认
+            $(".defa").on("click", function () {
+                var li = $(this).parents("li");
+                var id = li.attr("data_id");
+                var flag = confirm("是否修改此地址为默认收货地址?");
+                if (flag == true) {
+                    // 修改成功,重新加载页面
+                    location.reload();
+                    $.ajax({
+                        type: "post",
+                        url: "{% url 'allorder:defaAddress' %}",
+                        data: {
+                            "id": id,
+                            "csrfmiddlewaretoken": "{{ csrf_token }}",
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            if (data.code == 0) {
+                                console.debug(data);
+                            } else {
+                                console.debug(data)
+                            }
+                        }
+                    });
+                } else {
+                    location.reload()
+                }
+            });
+        })
+    </script>
+{% endblock %}

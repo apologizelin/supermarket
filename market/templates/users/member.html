@@ -29,16 +29,16 @@
             <a href="../step.html" class="step"><img src="{% static 'images/step.png' %}" width="26"/></a>
         </div>
         <div class="mem-pic">
-{#        {% static 'images/memtx.png' %}#}
-        <div class="mem-pic-bg" style="background-image: url({{ MEDIA_URL }}{{ data.head }});"></div>
-    </div>
+            {#        {% static 'images/memtx.png' %}#}
+            <div class="mem-pic-bg" style="background-image: url({{ MEDIA_URL }}{{ data.head }});"></div>
+        </div>
     {% else %}
         <div class="mem-tit">现在去<a href="{% url 'users:login' %}">登录</a>/<a href="{% url 'users:register' %}">注册</a>
             <a href="../step.html" class="step"><img src="{% static 'images/step.png' %}" width="26"/></a>
         </div>
         <div class="mem-pic">
-        <div class="mem-pic-bg" style="background-image: url({% static 'images/memtx.png' %});"></div>
-    </div>
+            <div class="mem-pic-bg" style="background-image: url({% static 'images/memtx.png' %});"></div>
+        </div>
     {% endif %}
     <ul class="member-menu">
         <li>
@@ -71,7 +71,7 @@
     <div class="u-list-main">
         <img src="{% static 'images/order-pic.png' %}" width="27"/>
         <span>我的购物订单</span>
-        <a href="../allorder/allorder.html">查看全部订单></a>
+        <a href="{% url 'allorder:订单' %}">查看全部订单></a>
     </div>
     <ul class="user-nav">
         <li><a href="../allorder/allorder.html"> <img src="{% static 'images/1-icon.png' %}">
@@ -90,7 +90,7 @@
     <ul class="user-nav">
         <li><a href="{% url 'users:info' %}"> <img src="{% static 'images/1-icon4.png' %}">
             <p>个人资料</p></a></li>
-        <li><a href="../gladdress.html"> <img src="{% static 'images/1-icon5.png' %}">
+        <li><a href="{% url 'allorder:gladdress' %}"> <img src="{% static 'images/1-icon5.png' %}">
             <p>收货地址</p></a></li>
         <li><a href="../saftystep.html"> <img src="{% static 'images/1-icon6.png' %}">
             <p>安全设置</p></a></li>

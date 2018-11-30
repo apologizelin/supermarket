@@ -44,12 +44,12 @@ class Infor(BaseModel):
 
 class UserAddress(BaseModel):
     """用户收货地址管理"""
-    user = models.ForeignKey(to="Users", verbose_name="用户名")
+    user = models.ForeignKey(to="Users", verbose_name="用户id")
     username = models.CharField(max_length=100, verbose_name="收货人")
     phone = models.CharField(max_length=11, verbose_name="收货人电话")
-    proper = models.CharField(max_length=100, blank=True, default='', verbose_name="省")
-    city = models.CharField(max_length=100, verbose_name="市")
-    area = models.CharField(max_length=100, blank=True, default='', verbose_name="区")
+    hcity = models.CharField(max_length=100, blank=True, default='', verbose_name="省")
+    hproper = models.CharField(max_length=100, blank=True, default='', verbose_name="市")
+    harea = models.CharField(max_length=100, blank=True, default='', verbose_name="区")
     brief = models.CharField(max_length=255, verbose_name="详细地址")
     isDefault = models.BooleanField(default=False, blank=True, verbose_name="是否设置为默认")
 

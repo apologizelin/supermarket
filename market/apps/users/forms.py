@@ -1,9 +1,10 @@
 from django import forms
+from django.core import validators
 from django.core.validators import RegexValidator
 from django_redis import get_redis_connection
 
 from apps.users.helper import set_password
-from apps.users.models import Users
+from apps.users.models import Users, UserAddress
 
 
 class RegForm(forms.Form):
@@ -169,3 +170,56 @@ def clean_ver_code(self):
     if str(verify_code) != str(s_code):
         raise forms.ValidationError("验证码输入有误")
     return verify_code
+
+
+# 用户添加收货地址验证
+class AddressForm(forms.Form):
+    """用户添加收货地址的表单"""
+
+    username = forms.CharField(error_messages={"required": "收货人不能为空"})
+    phone = forms.CharField(error_messages={"required": "手机号码不能为空"},
+                            validators=[
+                                RegexValidator(r'^1[35789]\d{9}$', "手机号码格式错误")
+                            ])
+    brief = forms.CharField(error_messages={"required": "详细地址不能为空"})
+    hcity = forms.CharField(error_messages={"required": "请选择地区"})
+    hproper = forms.CharField(error_messages={"required": "请选择地区"})
+    harea = forms.CharField(error_messages={"required": "请选择地区"})
+    isDefault = forms.BooleanField(error_messages={"required": "参数错误"}, required=False)
+
+    def clean(self):
+        # 验证如果数据库里地址已经超过6六表报错
+        user_id = self.data.get("user_id")
+        count = UserAddress.objects.filter(user=user_id, isDelete=False).count()
+        if count >= 6:
+            raise forms.ValidationError("收货地址最多只能保存6条")
+
+        # 设置默认
+        isDfault = self.cleaned_data.get("isDefault")
+        if isDfault:
+            UserAddress.objects.filter(user=user_id).update(isDefault=False)
+        return self.cleaned_data
+
+
+# 用户编辑收货地址验证
+class EditaddressForm(forms.Form):
+    """用户添加收货地址的表单"""
+
+    username = forms.CharField(error_messages={"required": "收货人不能为空"})
+    phone = forms.CharField(error_messages={"required": "手机号码不能为空"},
+                            validators=[
+                                RegexValidator(r'^1[35789]\d{9}$', "手机号码格式错误")
+                            ])
+    brief = forms.CharField(error_messages={"required": "详细地址不能为空"})
+    hcity = forms.CharField(error_messages={"required": "请选择地区"})
+    hproper = forms.CharField(error_messages={"required": "请选择地区"})
+    harea = forms.CharField(error_messages={"required": "请选择地区"})
+    isDefault = forms.BooleanField(error_messages={"required": "参数错误"}, required=False)
+
+    def clean(self):
+        user_id = self.data.get("user_id")
+        # 设置默认
+        isDfault = self.cleaned_data.get("isDefault")
+        if isDfault:
+            UserAddress.objects.filter(user=user_id).update(isDefault=False)
+        return self.cleaned_data

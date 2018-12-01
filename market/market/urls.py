@@ -23,7 +23,7 @@ urlpatterns = [
     # 上传部件自动调用的上传地址
     url(r'^ckeditor/', include("ckeditor_uploader.urls")),
     url(r'^users/', include("apps.users.urls", namespace="users")),  # 用户
-    url(r'^goods/', include("apps.goods.urls", namespace="goods")),  # 商品
+    url(r'', include("apps.goods.urls", namespace="goods")),  # 商品
     url(r'^cart/', include("apps.cart.urls", namespace="cart")),  # 购物车
     url(r'^allorder/', include("apps.allorder.urls", namespace="allorder")),  # 订单
 ]

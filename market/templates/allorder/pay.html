@@ -1,0 +1,27 @@
+{% extends 'public/base.html' %}
+{% load static %}
+
+{% block main %}
+    <header data-am-widget="header" class="am-header am-header-default sq-head ">
+        <div class="am-header-left am-header-nav">
+            <a href="javascript:history.back()" class="">
+                <i class="am-icon-chevron-left"></i>
+            </a>
+        </div>
+        <h1 class="am-header-title">
+            <a href="" class="">完成支付</a>
+        </h1>
+    </header>
+    <div style="height: 49px;"></div>
+    <ul class="order-detail">
+        <li><span>支付结果：</span>{{ message }}</li>
+    </ul>
+    <a href="{% url 'allorder:订单' %}">
+        <input type="button" class="login-btn" value="查看订单">
+    </a>
+{% endblock %}
+
+{% block foot_js %}
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/amazeui.min.js' %}"></script>
+{% endblock %}

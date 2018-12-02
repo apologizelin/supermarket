@@ -18,6 +18,7 @@ from django.conf import settings
 import time
 
 
+# 订单页面
 def allorder(request):
     return render(request, "allorder/allorder.html")
 
